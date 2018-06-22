@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_margin="5dp"
+    android:background="@drawable/shadow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image_friend"
+        android:background="@drawable/friend_basic"
+        android:scaleType="fitXY"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        />
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_toRightOf="@+id/image_friend"
+        android:id="@+id/name"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:textSize="15dp"
+        android:text="수화"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!--
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/name"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:text="23" />
+        -->
+
+    <Button
+
+        android:layout_alignParentRight="true"
+        android:id="@+id/but_ar"
+        android:background="@drawable/but_call2"
+        android:layout_centerVertical="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+</RelativeLayout>

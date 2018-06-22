@@ -4,7 +4,7 @@
     <item
         android:id="@+id/navi_server"
         android:title="서버"
-        android:icon="@drawable/ic_favorite"
+        android:icon="@drawable/ic_fb"
         app:showAsAction="withText" />
     <item
         android:id="@+id/navi_freind"
@@ -15,7 +15,7 @@
     <item
         android:id="@+id/navi_more"
         android:title="더보기"
-        android:icon="@drawable/ic_fb"
+        android:icon="@drawable/ic_favorite"
         app:showAsAction="withText" />
 
 </menu>
