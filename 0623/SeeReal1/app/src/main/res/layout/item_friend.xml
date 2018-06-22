@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/image_friend"
-        android:background="@drawable/imagesu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/friend_basic"
+        android:scaleType="fitXY"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         />
 
     <TextView

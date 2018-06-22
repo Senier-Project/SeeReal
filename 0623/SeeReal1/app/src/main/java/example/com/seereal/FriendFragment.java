@@ -46,7 +46,10 @@ public class FriendFragment extends Fragment {
       //  FriendData friendData = new FriendData("수화", "23");
         mData.add(friendData);
 
+        //추가한거
+
         friendData = new FriendData("수화22");
+        friendData.setImage(R.drawable.imagesu);
         mData.add(friendData);
 
         mAdapter = new FriendFragmentAdapter(mData);
@@ -73,6 +76,7 @@ public class FriendFragment extends Fragment {
             FriendData friendData = items.get(position);
 
             holder.nameText.setText(friendData.getName());
+            holder.img.setImageResource(friendData.getImg());
         }
 
         @Override

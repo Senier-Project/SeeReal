@@ -1,10 +1,8 @@
 package example.com.seereal;
 
-import android.widget.ImageView;
-
 public class FriendData {
     private String name;
-    private ImageView img;
+    private int img;
    // private String age;
 
     public FriendData(String name)//, String age) {
@@ -12,7 +10,7 @@ public class FriendData {
         this.name = name;
      //   this.age = age;
     }
-    public FriendData(String name, ImageView img)//, String age) {
+    public FriendData(String name, int img)//, String age) {
     {
         this.name = name;
         this.img = img;
@@ -26,7 +24,10 @@ public class FriendData {
   //  public String getAge() {  return age;   }
 
 
-    public ImageView getImg() {
+    public int getImg() {
         return img;
+    }
+    public void setImage(int img) {
+        this.img = img;
     }
 }

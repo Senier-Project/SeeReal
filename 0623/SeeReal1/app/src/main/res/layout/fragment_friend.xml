@@ -27,7 +27,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorPrimary"
-            android:src="@drawable/ic_face"
+            android:src="@drawable/friend_add"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:fabSize="normal"
