@@ -1,5 +1,6 @@
 package example.com.seereal;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,11 +24,19 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    public static int width;
+    public static int height;
     //  TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size= new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
 
         BottomNavigationView bottomNavigationItemView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigationItemView.setOnNavigationItemSelectedListener(this);
@@ -67,8 +78,6 @@ public class MainActivity extends AppCompatActivity
                         break;
 
                 }
-
-
                 return true;
             }
         });
@@ -128,6 +137,16 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+       if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+           mDrawerLayout.closeDrawer(GravityCompat.START);
+       }
+       else{
+           super.onBackPressed();
+       }
     }
 }
 

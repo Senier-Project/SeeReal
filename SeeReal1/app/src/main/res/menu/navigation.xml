@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navi_server"
-        android:title="서버"
+        android:title="Server"
         android:icon="@drawable/ic_fb"
         app:showAsAction="withText" />
     <item
         android:id="@+id/navi_freind"
-        android:title="친구"
+        android:title="Friend"
         android:icon="@drawable/ic_face"
         app:showAsAction="withText" />
 
     <item
         android:id="@+id/navi_more"
-        android:title="더보기"
+        android:title="SeaReal"
         android:icon="@drawable/ic_favorite"
         app:showAsAction="withText" />
 

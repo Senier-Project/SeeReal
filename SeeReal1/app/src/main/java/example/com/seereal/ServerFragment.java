@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class ServerFragment extends Fragment {
     static final String[] category = {"전자","기계","자동차","조선","석유화학","섬유","농림업","건설업","컴퓨터","길찾기","기타"};
-    private ArrayList<String> filteredLisst;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,9 +36,8 @@ public class ServerFragment extends Fragment {
                 if(selected_item.equals("자동차")) {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.fragment_container,new VehicleField());
+                    ft.addToBackStack(null);
                     ft.commit();
-
-
                 }
             }
         });

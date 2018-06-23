@@ -11,11 +11,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <EditText
+            android:layout_margin="7dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:singleLine="true"
             android:id="@+id/editSearch"
             android:imeOptions="actionSearch"
+            android:background="@drawable/rounded_edittext"
+            android:hint="Search"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
             android:cursorVisible="false"/>
 
         <ListView

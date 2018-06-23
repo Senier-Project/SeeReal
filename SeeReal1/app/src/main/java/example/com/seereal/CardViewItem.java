@@ -2,7 +2,8 @@ package example.com.seereal;
 
 public class CardViewItem {
     int image;
-    String title,tag;
+    int isLike;
+    String title, tag;
 
     public int getImage() {
         return image;
@@ -10,6 +11,14 @@ public class CardViewItem {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public int getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
     }
 
     public String getTitle() {
