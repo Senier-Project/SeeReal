@@ -1,5 +1,6 @@
 package example.com.seereal;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 
 public class ServerFragment extends Fragment {
     static final String[] category = {"전자","기계","자동차","조선","석유화학","섬유","농림업","건설업","컴퓨터","길찾기","기타"};
-
+    EditText search;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class ServerFragment extends Fragment {
                 String selected_item = (String)parent.getItemAtPosition(position);
 
                 if(selected_item.equals("자동차")) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.fragment_container,new VehicleField());
                     ft.addToBackStack(null);
@@ -42,7 +46,7 @@ public class ServerFragment extends Fragment {
             }
         });
 
-        EditText search = view.findViewById(R.id.editSearch);
+        search = view.findViewById(R.id.editSearch);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

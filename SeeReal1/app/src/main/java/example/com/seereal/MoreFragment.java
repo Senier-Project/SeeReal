@@ -20,7 +20,6 @@ public class MoreFragment extends Fragment {
     ImageView myList,favoriteList;
      Fragment contents;
      Fragment favoriteContents;
-     FrameLayout frameLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
