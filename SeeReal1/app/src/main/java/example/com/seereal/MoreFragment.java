@@ -11,20 +11,22 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 
 public class MoreFragment extends Fragment {
     boolean inList =true;
     ImageView myList,favoriteList;
-
-
+     Fragment contents;
+     Fragment favoriteContents;
+     FrameLayout frameLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_more,null);
-        final Fragment contents =  new MyList();
-        final Fragment favoriteContents = new FavoriteList();
+        contents =  new MyList();
+        favoriteContents = new FavoriteList();
 
         myList =(ImageView)view.findViewById(R.id.list_image);
         myList.setOnClickListener(new View.OnClickListener() {
@@ -34,8 +36,7 @@ public class MoreFragment extends Fragment {
                     myList.setImageResource(R.drawable.selected_list);
                     int color = ContextCompat.getColor(getActivity(),R.color.black);
                     favoriteList.setColorFilter(color);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.contents_fragment,contents ).commit();
+                   onFragmentChanged(0);
                     inList=true;
                 }
             }
@@ -48,8 +49,7 @@ public class MoreFragment extends Fragment {
                     myList.setImageResource(R.drawable.list);
                     int color = ContextCompat.getColor(getActivity(),R.color.colorPrimary);
                     favoriteList.setColorFilter(color);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.contents_fragment,favoriteContents ).commit();
+                    onFragmentChanged(1);
                     inList=false;
 
                 }
@@ -58,6 +58,14 @@ public class MoreFragment extends Fragment {
 
 
         return view;
+    }
+
+    public void onFragmentChanged(int index){
+        if(index==0){
+            getChildFragmentManager().beginTransaction().replace(R.id.contents_fragment,contents).commit();
+        } else if(index ==1 ){
+            getChildFragmentManager().beginTransaction().replace(R.id.contents_fragment,favoriteContents).commit();
+        }
     }
 
 }

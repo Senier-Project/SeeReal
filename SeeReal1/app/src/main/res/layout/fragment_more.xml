@@ -18,7 +18,7 @@
 
             <ImageView
                 android:id="@+id/image_profile"
-                android:background="@drawable/friend_basic"
+                android:background="@drawable/imagebea"
                 android:scaleType="fitXY"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -63,12 +63,16 @@
 
         </TableRow>
     </TableLayout>
-    <fragment
+
+    <FrameLayout
         android:id="@+id/contents_fragment"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        
-        />
+        android:layout_height="match_parent">
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="example.com.seereal.MyList"/>
+
+    </FrameLayout>
 
 </LinearLayout>

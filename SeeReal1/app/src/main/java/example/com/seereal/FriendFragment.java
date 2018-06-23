@@ -44,12 +44,13 @@ public class FriendFragment extends Fragment {
         mData = new ArrayList<>();
         //ImageView  myImg = null;
         //myImg.setImageDrawable(getResources().getDrawable(R.drawable.but_call2));
-        FriendData friendData = new FriendData("수화");
-      //  FriendData friendData = new FriendData("수화", "23");
+        FriendData friendData = new FriendData("재현");
+        friendData.setImage(R.drawable.imgeje);
+        //  FriendData friendData = new FriendData("수화", "23");
         mData.add(friendData);
         //추가한거
 
-        friendData = new FriendData("수화22");
+        friendData = new FriendData("수화");
         friendData.setImage(R.drawable.imagesu);
         mData.add(friendData);
 
@@ -101,7 +102,7 @@ public class FriendFragment extends Fragment {
                 img = (ImageView) view.findViewById(R.id.image_friend);
                 nameText = (TextView) view.findViewById(R.id.name);
                 callBtn=(Button)view.findViewById(R.id.but_ar);
-              //  ageText = (TextView) view.findViewById(R.id.age);
+                //  ageText = (TextView) view.findViewById(R.id.age);
 
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
