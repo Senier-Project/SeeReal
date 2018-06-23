@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_myPage"
-        android:title="공지사항" />
+        android:title="마이페이지" />
 
     <item
         android:id="@+id/nav_notify"
