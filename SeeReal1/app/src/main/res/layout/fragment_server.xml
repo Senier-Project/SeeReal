@@ -6,10 +6,23 @@
     tools:context=".ServerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="100dp"
-        android:text="서버" />
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:singleLine="true"
+            android:id="@+id/editSearch"
+            android:imeOptions="actionSearch"
+            android:cursorVisible="false"/>
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textFilterEnabled="true"/>
+    </LinearLayout>
 
 </FrameLayout>
