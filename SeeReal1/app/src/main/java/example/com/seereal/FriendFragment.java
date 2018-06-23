@@ -1,5 +1,6 @@
 package example.com.seereal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,7 +47,6 @@ public class FriendFragment extends Fragment {
         FriendData friendData = new FriendData("수화");
       //  FriendData friendData = new FriendData("수화", "23");
         mData.add(friendData);
-
         //추가한거
 
         friendData = new FriendData("수화22");
@@ -60,6 +61,8 @@ public class FriendFragment extends Fragment {
 
     class FriendFragmentAdapter extends RecyclerView.Adapter<FriendFragmentAdapter.ViewHolder> {
         private ArrayList<FriendData> items;
+        final String packageName="com.PleaseCompany.please";
+        Intent intent=getActivity().getPackageManager().getLaunchIntentForPackage(packageName);
 
         public FriendFragmentAdapter(ArrayList<FriendData> items) {
             this.items = items;
@@ -68,6 +71,7 @@ public class FriendFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
+
             return new ViewHolder(v);
         }
 
@@ -88,6 +92,7 @@ public class FriendFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
             public final TextView nameText;
             public final ImageView img;
+            public final Button callBtn;
             //public final TextView ageText;
 
             public ViewHolder(View view) {
@@ -95,7 +100,15 @@ public class FriendFragment extends Fragment {
 
                 img = (ImageView) view.findViewById(R.id.image_friend);
                 nameText = (TextView) view.findViewById(R.id.name);
+                callBtn=(Button)view.findViewById(R.id.but_ar);
               //  ageText = (TextView) view.findViewById(R.id.age);
+
+                callBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().startActivity(intent);
+                    }
+                });
             }
         }
     }
