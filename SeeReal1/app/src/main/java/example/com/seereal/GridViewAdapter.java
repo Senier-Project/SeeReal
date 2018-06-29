@@ -20,14 +20,14 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
     ArrayList<CardViewItem> item;
     ArrayList<CardViewItem> filteredItemList;
     Filter listFilter;
-    int width;
-    int height;
+    private int width;
+    private int height;
 
-    GridViewAdapter(Context c, ArrayList<CardViewItem> item,int width,int height){
-        this.c= c;
+    GridViewAdapter(Context c, ArrayList<CardViewItem> item, int width, int height) {
+        this.c = c;
         this.item = item;
-        this.width=width;
-        this.height=height;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -48,8 +48,8 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView==null){
-            convertView= LayoutInflater.from(c).inflate(R.layout.card_view,parent,false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(c).inflate(R.layout.card_view, parent, false);
         }
         final CardViewItem item = (CardViewItem) this.getItem(position);
 
@@ -58,8 +58,8 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
         TextView titleView = convertView.findViewById(R.id.titleText);
         TextView tagView = convertView.findViewById(R.id.tagText);
 
-        imageView.getLayoutParams().height=height/5;
-        imageView.getLayoutParams().width=width/3;
+        imageView.getLayoutParams().height = height / 5;
+        imageView.getLayoutParams().width = width / 3;
         imageView.requestLayout();
         imageView.setImageResource(item.getImage());
         isLike.setImageResource(item.getIsLike());
@@ -68,14 +68,14 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
 
         isLike.setOnClickListener(new View.OnClickListener() {
 
-            int i=0;
+            int i = 0;
+
             @Override
             public void onClick(View v) {
-                i=1-i;
-                if(i==0){
+                i = 1 - i;
+                if (i == 0) {
                     isLike.setImageResource(R.drawable.baseline_favorite_border_black_18dp);
-                }
-                else{
+                } else {
                     isLike.setImageResource(R.drawable.baseline_favorite_black_18dp);
                 }
             }

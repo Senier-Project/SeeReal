@@ -1,5 +1,8 @@
 package example.com.seereal;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,11 +30,34 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     public static int width;
     public static int height;
+
+    //권한설정용
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.CAMERA",
+            "android.permission.RECORD_AUDIO",
+            "android.permission.MODIFY_AUDIO_SETTINGS",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.BLUETOOTH",
+            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+    };
+
     //  TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //권한설정
+        if (android.os.Build.VERSION.SDK_INT >= 23)
+        {
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
+        //
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size= new Point();
@@ -76,7 +103,11 @@ public class MainActivity extends AppCompatActivity
                     case R.id.nav_sign_out :
                         Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
                         break;
-
+                    case R.id.nav_info :
+                        Toast.makeText(MainActivity.this, "개발자정보", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(),InfoActivity.class);
+                        startActivity(intent);
+                        break;
                 }
                 return true;
             }
@@ -147,6 +178,34 @@ public class MainActivity extends AppCompatActivity
        else{
            super.onBackPressed();
        }
+    }
+
+    //권한설정
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for(int i = 0; i < cnt; i++ ) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+
+                       // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                       // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
+        }
     }
 }
 
