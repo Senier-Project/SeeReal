@@ -40,12 +40,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--<TextView
+            <TextView
             android:id="@+id/testText"
+            android:textSize="500px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="dd"/>-->
+            android:text="dd"/>
         </FrameLayout>
+
 
 
     </RelativeLayout>

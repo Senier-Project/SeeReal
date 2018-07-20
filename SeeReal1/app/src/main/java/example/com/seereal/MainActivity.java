@@ -16,15 +16,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mData = mDatabase.child("Test").child("aaa");
+
+    private FirebaseAuth.AuthStateListener mListener;
+
+    TextView tv;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -46,11 +58,31 @@ public class MainActivity extends AppCompatActivity
             "android.permission.WRITE_EXTERNAL_STORAGE"
     };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mData.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.getValue(String.class);
+                tv.setText(name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w( "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
     //  TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tv = (TextView) findViewById(R.id.testText);
+
 
         //권한설정
         if (android.os.Build.VERSION.SDK_INT >= 23)
@@ -102,6 +134,8 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.nav_sign_out :
                         Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
+
                         break;
                     case R.id.nav_info :
                         Toast.makeText(MainActivity.this, "개발자정보", Toast.LENGTH_SHORT).show();

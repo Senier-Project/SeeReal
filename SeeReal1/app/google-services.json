@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "663655734368",
+    "firebase_url": "https://see-real.firebaseio.com",
+    "project_id": "see-real",
+    "storage_bucket": "see-real.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663655734368:android:32721b0d55c468ce",
+        "android_client_info": {
+          "package_name": "example.com.seereal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663655734368-tf72j81mccgac0vb3qqscfmj1pjb30dr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaPdNOfrHfVk-ukbg_3dPlGOcDP3LYWI4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

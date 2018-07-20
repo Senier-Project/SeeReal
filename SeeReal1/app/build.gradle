@@ -33,4 +33,10 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.+'
     implementation 'com.github.medyo:android-about-page:1.2.4'
 
+    implementation 'com.google.firebase:firebase-database:11.8.0'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+
+    implementation 'com.google.android.gms:play-services-auth:11.8.0'
+
 }
+apply plugin: 'com.google.gms.google-services'
