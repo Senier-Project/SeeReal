@@ -3,6 +3,7 @@ package example.com.seereal;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,19 +22,29 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private Bitmap bitmap;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mData = mDatabase.child("Test").child("aaa");
 
+    TextView userName, userEmail;
     private FirebaseAuth.AuthStateListener mListener;
 
     TextView tv;
@@ -59,9 +70,18 @@ public class MainActivity extends AppCompatActivity
     };
 
     @Override
+    protected void onStop() {
+        if (mListener != null) {
+            InitApp.sAuth.removeAuthStateListener(mListener);   // 인증 상태 리스너 해제.
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
+        InitApp.sAuth.addAuthStateListener(mListener);
         mData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -80,6 +100,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("susu","onCreate");
+        setFirebase();
 
         tv = (TextView) findViewById(R.id.testText);
 
@@ -134,8 +156,8 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.nav_sign_out :
                         Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
-                        FirebaseAuth.getInstance().signOut();
-
+                        //FirebaseAuth.getInstance().signOut();
+                        signOut();
                         break;
                     case R.id.nav_info :
                         Toast.makeText(MainActivity.this, "개발자정보", Toast.LENGTH_SHORT).show();
@@ -150,6 +172,62 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+    private void signOut() {
+        List<? extends UserInfo> providerData = InitApp.sUser.getProviderData();
+
+        // Firebase sign out
+        InitApp.sAuth.signOut();
+
+        for (UserInfo info : providerData) {
+            switch (info.getProviderId()) {
+                // 구글 인증을 받은 유저일 경우.
+                case "google.com":
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.default_web_client_id))
+                            .requestEmail()
+                            .build();
+                    GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+                    mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("susu", "GoogleSignOutComplete");
+                        }
+                    });
+                    break;
+
+            }
+        }
+    }
+
+
+    public void setFirebase() {
+        Log.d("susu","firebase처음");
+        InitApp.sDatabase = FirebaseDatabase.getInstance();
+        mListener = new FirebaseAuth.AuthStateListener() {
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                InitApp.sUser = InitApp.sAuth.getCurrentUser();
+                Log.d("susu","setFirebase들어옴");
+                // 유저가 없다고 확인될 경우, 액티비티를 종료하고 로그인 액티비티로 넘어감.
+                if (InitApp.sUser == null) {
+                    Toast.makeText(MainActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                } else {    // 유저가 존재할 경우, Drawer 헤더에 유저 정보 표시.
+
+                    userName = (TextView) findViewById(R.id.userName);
+                    userEmail = (TextView) findViewById(R.id.userEmail);
+                    userName.setText(InitApp.sUser.getDisplayName());
+                    userEmail.setText(InitApp.sUser.getEmail());
+                }
+            }
+        };
+
+        //((InitApp)getApplication()).initDatabase();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 

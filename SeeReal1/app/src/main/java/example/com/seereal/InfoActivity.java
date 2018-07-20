@@ -19,7 +19,7 @@ public class InfoActivity extends AppCompatActivity {
                 .setDescription("SeaReal\n어플설명들어갈부분\n개발자: 유수화 배범준 이재현\nGachon Univ.\nSoftware Dept.")
                 .addItem(new Element().setTitle("Version 1.0"))
                 .addGroup("Connect with us")
-                .addEmail("수화이메일")
+                .addEmail("usuhwa2@gmail.com")
                 .addEmail("뱀이메일")
                 .addEmail("izg0820@naver.com")
                 .addPlayStore("jwh.com.eumme")

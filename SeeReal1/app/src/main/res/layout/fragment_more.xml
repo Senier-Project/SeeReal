@@ -14,26 +14,26 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="100dp">
 
-            <ImageView
-                android:id="@+id/image_profile"
-                android:background="@drawable/imagebea"
-                android:scaleType="fitXY"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                />
+
             <TextView
                 android:id="@+id/user_id"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/image_profile"
-                android:layout_centerVertical="true"
-                android:text="배범준"
+                android:layout_centerInParent="true"
+                android:textSize="20dp"
+                android:text="testName"
                 android:textStyle="bold"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_id"
+                android:layout_centerInParent="true"
+                android:text="testEmail@gmail.com"
                 android:gravity="center"
                 />
         </RelativeLayout>

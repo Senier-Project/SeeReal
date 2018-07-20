@@ -21,28 +21,26 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
 
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by user on 2017-11-04.
+ * Created by sh
  */
 
 public class LoginActivity extends AppCompatActivity {
     final int RC_SIGN_IN = 1001; // 로그인 확인여부 코드
-    private FirebaseAuth mAuth;
+    private Toast toast;
     private SignInButton signInButton; //구글 로그인 버튼
     private GoogleApiClient mGoogleApiClient; //API 클라이언트
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance(); // 인스턴스 생성
-
+        InitApp.sAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance(); // 인스턴스 생성
+        toast = Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -57,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+
 
         signInButton = (SignInButton)findViewById(R.id.sign_in_button);
 
@@ -82,7 +82,8 @@ public class LoginActivity extends AppCompatActivity {
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
-
+                // InitApp.sUser = InitApp.sAuth.getCurrentUser();
+                //InitApp.sUser.getDisplayName()
                 Log.d(TAG, "이름 =" + account.getDisplayName());
                 Log.d(TAG, "이메일=" + account.getEmail());
                 Log.d(TAG, "getId()=" + account.getId());
@@ -99,19 +100,35 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() { // 사용자가 현재 로그인되어 있는지 확인
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+      /*  FirebaseUser currentUser = InitApp.sAuth.getCurrentUser();
         if(currentUser!=null){ // 만약 로그인이 되어있으면 다음 액티비티 실행
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
+        }*/
+
+        InitApp.sUser = InitApp.sAuth.getCurrentUser();
+
+        // 인증된 유저가 존재할 경우 바로 Main액티비티로 넘긴 후 SignIn액티비티는 종료.
+        if (InitApp.sUser != null) {
+            toast.setText(InitApp.sUser.getDisplayName() + "님 환영합니다.");
+            toast.show();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+            finish();
+        } else {
         }
+
+
+
+
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        InitApp.sAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
