@@ -22,4 +22,9 @@ public class InitApp extends Application{
         sUser = sAuth.getCurrentUser();
     }
 
+  /*  public void initDatabase() {
+        sDatabase = FirebaseDatabase.getInstance();
+
+    }*/
+
 }

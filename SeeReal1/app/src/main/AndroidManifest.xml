@@ -23,22 +23,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
-
-        </activity>
+            android:theme="@style/SplashTheme" />
         <activity
             android:name=".Drawer"
             android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".InfoActivity" />
-        <activity android:name=".LoginActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".MyPageActivity"></activity>
     </application>
 
 </manifest>

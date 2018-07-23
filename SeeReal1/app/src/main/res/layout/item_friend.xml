@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--
     <ImageView
         android:id="@+id/image_friend"
         android:background="@drawable/friend_basic"
@@ -13,29 +14,28 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         />
-
+-->
     <TextView
         android:layout_weight="1"
-        android:layout_toRightOf="@+id/image_friend"
         android:id="@+id/name"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:textSize="15dp"
+        android:textSize="25dp"
         android:text="수화"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!--
+
     <TextView
-        android:id="@+id/age"
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/name"
         android:layout_marginLeft="15dp"
         android:layout_weight="1"
-        android:text="23" />
-        -->
+        android:text="test@gmail.com" />
+
 
     <Button
 

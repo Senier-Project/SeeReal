@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyPageActivity">
+    <TextView
+        android:id="@+id/userEmail"
+        android:layout_centerInParent="true"
+        android:text="testEmail"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/userName"
+        android:text="testName"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:layout_above="@+id/userEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/testEdit"
+        android:layout_below="@+id/userEmail"
+        android:layout_centerHorizontal="true"
+        android:hint="testEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/testBtn"
+        android:text="Click"
+        android:layout_below="@+id/userEmail"
+        android:layout_toRightOf="@+id/testEdit"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

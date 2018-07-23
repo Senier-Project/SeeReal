@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     TextView userName, userEmail;
     private FirebaseAuth.AuthStateListener mListener;
 
-    TextView tv;
+    TextView testText;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -82,11 +82,12 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
 
         InitApp.sAuth.addAuthStateListener(mListener);
+
         mData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.getValue(String.class);
-                tv.setText(name);
+                testText.setText(name);
             }
 
             @Override
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("susu","onCreate");
         setFirebase();
 
-        tv = (TextView) findViewById(R.id.testText);
+        testText = (TextView) findViewById(R.id.testText);
 
 
         //권한설정
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.nav_myPage :
                         Toast.makeText(MainActivity.this, "마이페이지", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, MyPageActivity.class));
                         break;
                     case R.id.nav_setting :
                         Toast.makeText(MainActivity.this, "설정", Toast.LENGTH_SHORT).show();
@@ -215,8 +217,9 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
-                } else {    // 유저가 존재할 경우, Drawer 헤더에 유저 정보 표시.
-
+                } else {
+                    // 유저가 존재할 경우, Drawer 헤더에 유저 정보 표시.
+                    //Log.d("susu","userName"+InitApp.sUser.getDisplayName());
                     userName = (TextView) findViewById(R.id.userName);
                     userEmail = (TextView) findViewById(R.id.userEmail);
                     userName.setText(InitApp.sUser.getDisplayName());
