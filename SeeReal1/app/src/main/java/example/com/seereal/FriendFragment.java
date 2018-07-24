@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +109,11 @@ public class FriendFragment extends Fragment {
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getActivity().startActivity(intent);
+                        //getActivity().startActivity(intent);
+                        Log.d("PlayRTC","버튼 클릭");
+                        Intent i = new Intent(getActivity(),PlayRTCMain.class);
+                        startActivity(i);
+
                     }
                 });
             }
