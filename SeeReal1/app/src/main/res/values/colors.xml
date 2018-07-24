@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4fe69c</color>
-    <color name="colorPrimaryDark">#1fd67c</color>
+    <color name="colorPrimary">#8e24aa</color>
+    <color name="colorPrimaryDark">#6a1b9a</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="gray"> #616161</color>
-    <color name="black">#000000</color>
+    <color name="non_check">#454545</color>
+    <color name="income">#2e7d32</color>
+    <color name="outcome">#c62828</color>
+    <color name="yellow">#ffeb3b</color>
+    <color name="green">#8bc34a</color>
+    <color name="red">#ff5722</color>
+    <color name="gray">#616161</color>
+    <color name="white">#ffff</color>
+
+    <color name ="daily0">#7986cb </color>
+    <color name ="daily1">#0097a7 </color>
+    <color name ="daily2">#3949ab </color>
+    <color name ="daily3">#536dfe </color>
+    <color name ="daily4">#3d5afe </color>
+
 </resources>

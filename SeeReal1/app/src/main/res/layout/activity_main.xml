@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    >
 
-    android:id="@+id/drawer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <RelativeLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark" >
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start">
 
-
-        </android.support.v7.widget.Toolbar>
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@drawable/navi_click"
-            app:itemTextColor="@drawable/navi_click"
-            app:menu="@menu/navigation" />
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:layout_above="@+id/bottomNavigation"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical">
 
-            <TextView
-            android:id="@+id/testText"
-            android:textSize="500px"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="dd"/>
-        </FrameLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark" >
 
 
+            </android.support.v7.widget.Toolbar>
 
-    </RelativeLayout>
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer"
-        android:layout_gravity="start"/>
-</android.support.v4.widget.DrawerLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.three_eung.saemoi.CustomViewPager
+                    android:id="@+id/mainPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <android.support.design.widget.BottomNavigationView
+                    android:id="@+id/mainTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:itemBackground="@android:color/white"
+                    app:itemIconTint="@color/bottom_main"
+                    app:itemTextColor="@color/bottom_main"
+                    app:menu="@menu/bottom_main" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer"
+            tools:visibility="gone" />
+
+    </android.support.v4.widget.DrawerLayout>
+</layout>

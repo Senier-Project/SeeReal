@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="cate"
+            type="com.three_eung.saemoi.bind.BudgetBind" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:id="@+id/item_cate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{cate.title}"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/won"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="원"
+            android:textSize="25sp" />
+
+
+        <EditText
+            android:id="@+id/item_cate_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/won"
+            android:hint="0"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:text="@{cate.value}"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+</layout>

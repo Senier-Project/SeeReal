@@ -1,30 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_myPage"
-            android:icon="@drawable/ic_emoticon"
-            android:title="마이페이지" />
-    </group>
-    <item android:title="설정">
-        <menu>
-            <item
-                android:id="@+id/nav_notify"
-                android:icon="@drawable/ic_attachment"
-                android:title="공지사항" />
+    <item
+        android:id="@+id/nav_info"
+        android:title="정보" />
 
-            <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_place"
-                android:title="설정" />
+    <item
+        android:id="@+id/nav_budget"
+        android:title="예산 설정" />
 
-            <item
-                android:id="@+id/nav_sign_out"
-                android:title="로그아웃" />
+    <item
+        android:id="@+id/nav_category"
+        android:title="카테고리 설정" />
 
-            <item
-                android:id="@+id/nav_info"
-                android:title="개발자 정보" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/nav_sign_out"
+        android:title="로그아웃" />
 </menu>
