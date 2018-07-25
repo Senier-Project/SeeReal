@@ -3,6 +3,7 @@ package example.com.seereal;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -73,19 +74,18 @@ public class PlayRTCMain extends AppCompatActivity {
             "android.permission.WRITE_EXTERNAL_STORAGE"
     };
 
-    public PlayRTCMain(Context context) {
-        this.mContext = context;
-    }
-
-    public PlayRTCMain(){
-
-    }
+    private String ChannelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_call_main);
         Log.d("PlayRTC","RTC Main 실행");
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        ChannelId = bundle.getString("channelId");
+       // Log.d("PlayRTC",ChannelId);
 
         //권한설정
         if (android.os.Build.VERSION.SDK_INT >= 23)
@@ -99,8 +99,8 @@ public class PlayRTCMain extends AppCompatActivity {
         createPlayRTCInstance();
 
         setToolbar();
-        setFragmentNavigationDrawer();
-        setOnClickEventListenerToButton();
+      //  setFragmentNavigationDrawer();
+      //  setOnClickEventListenerToButton();
 
     }
 
@@ -261,7 +261,7 @@ public class PlayRTCMain extends AppCompatActivity {
          * - Front
          * - Back
          */
-        config.video.setCameraType(CameraType.Front);
+        config.video.setCameraType(CameraType.Back);
 
 
         /*
@@ -324,7 +324,7 @@ public class PlayRTCMain extends AppCompatActivity {
         myViewDimensions.y = myVideoViewGroup.getHeight();
 
         if(remoteView == null){
-            createRemoteVideoView(myViewDimensions,myVideoViewGroup);
+           // createRemoteVideoView(myViewDimensions,myVideoViewGroup);
         }
 
         if(localView == null){
@@ -337,14 +337,19 @@ public class PlayRTCMain extends AppCompatActivity {
         if (localView == null) {
             // Create the video size variable.
             Point myVideoSize = new Point();
-            myVideoSize.x = (int) (parentViewDimensions.x * 0.3);
-            myVideoSize.y = (int) (parentViewDimensions.y * 0.3);
+            myVideoSize.x = (int) (parentViewDimensions.x);
+            myVideoSize.y = (int) (parentViewDimensions.y);
+
+            //For test
+            /*TextView textView = new TextView(parentVideoViewGroup.getContext());
+            textView.setText("LOCAL");
+            setContentView(textView);*/
 
             // Create the view parameter.
             RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(myVideoSize.x, myVideoSize.y);
             param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            param.setMargins(30, 30, 30, 30);
+            //param.setMargins(30, 30, 30, 30);
 
             // Create the localViews.
             // new v2.2.6
@@ -461,6 +466,8 @@ public class PlayRTCMain extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton(R.string.alert_positive, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int id) {
                 dialogInterface.dismiss();
+               // Intent intent = new Intent(PlayRTCMain.this,MainActivity.class);
+               // startActivity(intent);
                 if (isChannelConnected == true) {
                     isCloseActivity = false;
 

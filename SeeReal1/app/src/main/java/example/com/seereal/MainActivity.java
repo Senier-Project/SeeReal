@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity
     public static int width;
     public static int height;
 
+    public static String userID;
+
 
     @Override
     protected void onStop() {
@@ -204,6 +206,9 @@ public class MainActivity extends AppCompatActivity
                     userEmail = (TextView) findViewById(R.id.userEmail);
                     userName.setText(InitApp.sUser.getDisplayName());
                     userEmail.setText(InitApp.sUser.getEmail());
+
+                    //사용자 ID 받기
+                    userID = userEmail.getText().toString().replaceAll("@gmail.com","");
                 }
             }
         };
@@ -274,7 +279,6 @@ public class MainActivity extends AppCompatActivity
            super.onBackPressed();
        }
     }
-
 
 }
 
