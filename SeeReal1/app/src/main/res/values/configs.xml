@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="kakao_auth_domain">http://52.78.99.123:8080</string>
-    <string name="kakao_app_key">5ba55b959b51fefc63f34e50f2dfcd93</string>
-</resources>
