@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="calendar"
+            type="com.three_eung.saemoi.bind.CalendarBind" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_cal_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="@{calendar.day}" />
+
+        <TextView
+            android:id="@+id/item_cal_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@{calendar.in}"
+            android:textSize="12sp"
+            android:textColor="@color/income" />
+
+        <TextView
+            android:id="@+id/item_cal_ex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@{calendar.ex}"
+            android:textSize="12sp"
+            android:textColor="@color/outcome" />
+    </LinearLayout>
+</layout>

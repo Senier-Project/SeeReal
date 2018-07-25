@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/saving_list_title"
+            android:layout_span="2"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="title"
+            android:textSize="50dp" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="총 아낀 누적액" />
+
+        <TextView
+            android:id="@+id/saving_list_total"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="육마넌" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="단위 금액" />
+
+        <TextView
+            android:id="@+id/saving_list_unit"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="육마넌" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="절약 횟수" />
+
+        <TextView
+            android:id="@+id/saving_list_count"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="육마넌" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="시작한 날" />
+
+        <TextView
+            android:id="@+id/saving_list_start"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="육마넌" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="절약을 시작한지" />
+
+        <TextView
+            android:id="@+id/saving_list_duration"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="육마넌" />
+    </TableRow>
+
+    <RelativeLayout
+
+        android:id="@+id/myLinearLayoutVertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/daylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dip"
+            android:text="절약을 지킨날" />
+
+        <TextView
+            android:id="@+id/saving_list_item1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/daylist"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/saving_list_item2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/saving_list_item1" />
+
+        <TextView
+            android:id="@+id/saving_list_item3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/saving_list_item2" />
+
+        <ImageView
+            android:id="@+id/load_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/loading" />
+
+    </RelativeLayout>
+
+</TableLayout>

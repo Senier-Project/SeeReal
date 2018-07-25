@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="saving"
+            type="com.three_eung.saemoi.bind.SavingBind" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/save_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@{saving.title}"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/save_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@{saving.unit}" />
+
+            <TextView
+                android:id="@+id/save_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@{saving.total}"
+                android:textStyle="bold|italic" />
+
+            <ImageView
+                android:id="@+id/save_btn"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:src="@drawable/saving_button"
+                android:onClickListener="@{saving.listener}"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

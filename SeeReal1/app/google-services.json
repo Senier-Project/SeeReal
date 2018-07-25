@@ -1,0 +1,79 @@
+{
+  "project_info": {
+    "project_number": "21642410988",
+    "firebase_url": "https://sae-moi.firebaseio.com",
+    "project_id": "sae-moi",
+    "storage_bucket": "sae-moi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21642410988:android:5a4bddd780bcf7de",
+        "android_client_info": {
+          "package_name": "com.three_eung.saemoi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21642410988-u9da6rtkusl2q46fo1ao3r1fgsojd81a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.three_eung.saemoi",
+            "certificate_hash": "88e9ce5ab955fe7f26092184c5574c20dde6aaa8"
+          }
+        },
+        {
+          "client_id": "21642410988-ubprc4mijfp9hcel8q0okohdofjpgsto.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.three_eung.saemoi",
+            "certificate_hash": "64e6fb3c6d83f425297f23919ed30da301b7211d"
+          }
+        },
+        {
+          "client_id": "21642410988-adt3s1462d7fn0bk1edd43idpoqlm5sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.three_eung.saemoi",
+            "certificate_hash": "cedf1bb8698be1ce83ff1a82b50aec17b54dcea2"
+          }
+        },
+        {
+          "client_id": "21642410988-1sujt871dnvhutqr1nk6p6km8gc8qcof.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.three_eung.saemoi",
+            "certificate_hash": "7af3a9e3cbca827c222d1079d8a68d085dacde80"
+          }
+        },
+        {
+          "client_id": "21642410988-lk7lg7jakhvrs6ta90lp9mr9vslibtqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRGXa8liNo_DFcA3DUfabg4hYbNmqII_8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21642410988-lk7lg7jakhvrs6ta90lp9mr9vslibtqm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
