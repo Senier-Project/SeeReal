@@ -1,8 +1,6 @@
 package example.com.seereal;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -19,6 +17,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,16 +36,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import static example.com.seereal.PlayRTCMain.MANDATORY_PERMISSIONS;
-
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private Bitmap bitmap;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mData = mDatabase.child("Test").child("aaa");
+    String uid = InitApp.sUser.getUid();
+
+    //DatabaseReference mData = mDatabase.child("users").child(uid).child("img");
 
     TextView userName, userEmail;
+    ImageView profileImg;
     private FirebaseAuth.AuthStateListener mListener;
 
     TextView testText;
@@ -71,9 +71,11 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        InitApp.sAuth.addAuthStateListener(mListener);
 
-        mData.addValueEventListener(new ValueEventListener() {
+        InitApp.sAuth.addAuthStateListener(mListener);
+        Log.d("susu","uid"+uid);
+        /*
+       mData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.getValue(String.class);
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
                 Log.w( "Failed to read value.", databaseError.toException());
             }
-        });
+        });*/
     }
     //  TextView tv;
     @Override
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("susu","onCreate");
+
         setFirebase();
 
         testText = (TextView) findViewById(R.id.testText);
@@ -204,8 +207,34 @@ public class MainActivity extends AppCompatActivity
                     //Log.d("susu","userName"+InitApp.sUser.getDisplayName());
                     userName = (TextView) findViewById(R.id.userName);
                     userEmail = (TextView) findViewById(R.id.userEmail);
+                    profileImg = (ImageView) findViewById(R.id.imageView);
+
                     userName.setText(InitApp.sUser.getDisplayName());
                     userEmail.setText(InitApp.sUser.getEmail());
+                    //(InitApp) getApplication()).getProfileImg())
+
+                   // Log.d("susu","initApp"+((InitApp) getApplication()).getProfileImg());
+
+                    DatabaseReference mDatabase = InitApp.sDatabase.getReference();
+                    String uid = InitApp.sUser.getUid();
+                    DatabaseReference mData = mDatabase.child("users").child(uid).child("img");
+
+
+                    mData.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int selected = dataSnapshot.getValue(Integer.class);
+                            //selectF = selected;
+                            profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w( "Failed to read value.", databaseError.toException());
+                        }
+                    });
+
+                  // profileImg.setImageResource(R.drawable.profile_0);
 
                     //사용자 ID 받기
                     userID = userEmail.getText().toString().replaceAll("@gmail.com","");
@@ -272,12 +301,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-       if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
-           mDrawerLayout.closeDrawer(GravityCompat.START);
-       }
-       else{
-           super.onBackPressed();
-       }
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
 }

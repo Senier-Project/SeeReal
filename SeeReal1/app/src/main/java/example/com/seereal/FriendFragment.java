@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -35,6 +36,8 @@ public class FriendFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<FriendData> mData;
 
+   private int mProfileImg;
+
     private String FriendID;
 
     public static FriendFragment newInstance() {
@@ -52,8 +55,7 @@ public class FriendFragment extends Fragment {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.friendListVIew);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
-        https:
-//www.youtube.com/watch?v=MGOrkrLpWgYuse
+       // https:www.youtube.com/watch?v=MGOrkrLpWgYuse
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //mData = new ArrayList<>();
@@ -90,23 +92,20 @@ public class FriendFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     items.clear();
-                    /*friendData = new FriendData("수화");
-        friendData.setImage(R.drawable.imagesu);
-        mData.add(friendData);
-           String value = dataSnapshot.getValue(String.class);
 
-           mDatabase.child("Test").child("aaa");
-           dataSnapshot.getValue(String.class);
-        */
                     FriendData friendData;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         // Log.d("susu","name"+snapshot.child("name").getValue(String.class));
-                        //  Log.d("susu","email"+snapshot.child("email"));
+                        //  Log.d("susu","email"+snapshot.child("email")); setImageResource(Utils.getProfileImgDrawable(selected));
 
                         String Fname = snapshot.child("name").getValue(String.class);
                         String Femail = snapshot.child("email").getValue(String.class);
-
-                        friendData = new FriendData(Fname, Femail);
+                        Log.d("susu","SS!! name"+Fname+"  / Femail"+Femail);
+                        Integer Fimg = snapshot.child("img").getValue(Integer.class);
+                       if(Fimg == null)
+                           Fimg = 0;
+                        //int Fimg= 2;
+                        friendData = new FriendData(Fname, Femail, Fimg);
 
                         items.add(friendData);
                     }
@@ -136,6 +135,7 @@ public class FriendFragment extends Fragment {
 
             holder.nameText.setText(friendData.getName());
             holder.emailText.setText(friendData.getEmail());
+            holder.img.setImageResource(Utils.getProfileImgDrawable(friendData.getImg()));
         }
 
         @Override
@@ -147,14 +147,15 @@ public class FriendFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
             public final TextView nameText;
             public final TextView emailText;
-            //public final ImageView img;
+            public final ImageView img;
             public final Button callBtn;
             //public final TextView ageText;
 
             public ViewHolder(View view) {
                 super(view);
 
-                //img = (ImageView) view.findViewById(R.id.image_friend);
+                img = (ImageView) view.findViewById(R.id.image_friend);
+
                 nameText = (TextView) view.findViewById(R.id.name);
                 emailText = (TextView) view.findViewById(R.id.email);
                 callBtn = (Button) view.findViewById(R.id.but_ar);

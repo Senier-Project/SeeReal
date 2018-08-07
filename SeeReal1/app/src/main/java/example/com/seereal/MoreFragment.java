@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MoreFragment extends Fragment {
     boolean inList =true;
+    ImageView profileImg;
     ImageView myList,favoriteList;
      Fragment contents;
      Fragment favoriteContents;
+     int selectF=9;
 
      private FirebaseAuth mAuth;
     Bitmap bitmap;
@@ -32,8 +40,33 @@ public class MoreFragment extends Fragment {
 
         TextView userName = (TextView) view.findViewById(R.id.user_id);
         TextView userEmail = (TextView) view.findViewById(R.id.user_email);
+        profileImg = view.findViewById(R.id.image_profile);
+
         userName.setText(InitApp.sUser.getDisplayName());
         userEmail.setText(InitApp.sUser.getEmail());
+
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String uid = InitApp.sUser.getUid();
+        DatabaseReference mData = mDatabase.child("users").child(uid).child("img");
+
+
+        mData.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int selected = dataSnapshot.getValue(Integer.class);
+                //selectF = selected;
+                profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w( "Failed to read value.", databaseError.toException());
+            }
+        });
+
+
+        //int selected = 5;
 
         //원래
         contents =  new MyList();
