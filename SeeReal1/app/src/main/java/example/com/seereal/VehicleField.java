@@ -1,21 +1,16 @@
 package example.com.seereal;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -61,7 +56,15 @@ public class VehicleField extends Fragment {
     {
         ArrayList<CardViewItem> list = new ArrayList<>();
 
+        SNSData snsData = new SNSData(5, "자동차 본넷","#그랜져#자동차#본넷#고장#실화임?");
+
+
         CardViewItem item = new CardViewItem();
+
+        item.setTitle(snsData.getTitle());
+        item.setImage(Utils.getProfileImgDrawable(snsData.getImg()));
+        item.setTag(snsData.getTag());
+
         item.setTitle("자동차 본넷");
         item.setTag("#그랜져#자동차#본넷#고장#실화임?");
         item.setImage(R.drawable.car);

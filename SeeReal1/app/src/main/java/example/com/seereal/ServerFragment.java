@@ -16,16 +16,72 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Iterator;
+
 
 public class ServerFragment extends Fragment {
-    static final String[] category = {"전자","기계","자동차","조선","석유화학","섬유","농림업","건설업","컴퓨터","길찾기","기타"};
+
+
+
+    //static final String[] category = {"전자","기계","자동차","조선","석유화학","섬유","농림업","건설업","컴퓨터","길찾기","기타"};
+    DatabaseReference mDatabase = InitApp.sDatabase.getReference();
+    DatabaseReference mCate;
+  //  final String[] category=new String[11];// = {"","","","","","","","","","",""};
+    View view;
+    ArrayAdapter adapter;
+    String [] temp = new String[100];
+
+
     EditText search;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_server, null);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,category);
+
+         view = inflater.inflate(R.layout.fragment_server, null);
+
+        mCate = mDatabase.child("category");
+        mCate.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
+                int i = 0;
+                while(child.hasNext()){
+                    //Log.i("category", " dd: "+child.next().getKey() );
+                    temp[i] = child.next().getKey();
+                    i++;
+                }
+/*
+                for(int i = 0; child.hasNext() && i<12; i++){
+                    temp[i] = child.next().getKey();
+                }*/
+
+                String [] category = new String [i];
+                for(int j = 0; j<i; j++){
+                    category[j] = temp[j];
+                }
+
+                 adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,category);
+
+                setting();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return view;
+
+    }
+
+    public void setting (){
+
 
         final ListView listView = (ListView) view.findViewById(R.id.listView1);
         listView.setAdapter(adapter);
@@ -66,7 +122,10 @@ public class ServerFragment extends Fragment {
 
             }
         });
-        return view;
+
     }
+
+
+
 
 }
