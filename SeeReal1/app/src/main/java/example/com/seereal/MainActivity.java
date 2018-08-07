@@ -211,6 +211,8 @@ public class MainActivity extends AppCompatActivity
 
                     userName.setText(InitApp.sUser.getDisplayName());
                     userEmail.setText(InitApp.sUser.getEmail());
+
+                    //profileImg.setImageResource(Utils.getProfileImgDrawable(((InitApp) getApplication()).getProfileImg()));
                     //(InitApp) getApplication()).getProfileImg())
 
                    // Log.d("susu","initApp"+((InitApp) getApplication()).getProfileImg());
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        //((InitApp)getApplication()).initDatabase();
+       // ((InitApp)getApplication()).initDatabase();
     }
 
     @Override
