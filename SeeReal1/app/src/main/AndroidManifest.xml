@@ -39,6 +39,8 @@
         </activity>
         <activity android:name=".MyPageActivity"></activity>
         <activity android:name=".PlayRTCMain"></activity>
+
+
     </application>
 
 </manifest>
