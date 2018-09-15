@@ -23,20 +23,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.sktelecom.playrtc.stream.PlayRTCMedia;
-import com.sktelecom.playrtc.util.ui.PlayRTCVideoView;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class FriendFragment extends Fragment {
     private Animation fab_open, fab_close;
@@ -51,17 +39,12 @@ public class FriendFragment extends Fragment {
 
    private int mProfileImg;
 
-    private String FriendID;
+
     private UserModel destinationUserModel ;
     private String requestContext;
 
-    public static PlayRTCMain playRTCMain;
-
     private Context mContext;
-    public PlayRTCVideoView localView = null;
-    public PlayRTCVideoView remoteView = null;
-    public PlayRTCMedia localMedia;
-    public PlayRTCMedia remoteMedia;
+
 
     public static FriendFragment newInstance() {
         FriendFragment friendFragment = new FriendFragment();
@@ -81,6 +64,7 @@ public class FriendFragment extends Fragment {
        // https:www.youtube.com/watch?v=MGOrkrLpWgYuse
         mRecyclerView.setLayoutManager(mLayoutManager);
         mContext=getContext();
+
         //mData = new ArrayList<>();
         //ImageView  myImg = null;
         //myImg.setImageDrawable(getResources().getDrawable(R.drawable.but_call2));
@@ -191,31 +175,26 @@ public class FriendFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        //ID만 따오기
-                        String term = emailText.getText().toString();
-                        FriendID = term.replaceAll("@gmail.com", "");
-                        destinationUserModel =new UserModel();
+
+                        /*destinationUserModel =new UserModel();
                         destinationUserModel.pushToken=pushToken;
-                        destinationUserModel.userName=nameText.getText().toString();
-                        playRTCMain = new PlayRTCMain(mContext,localMedia,remoteMedia,localView,remoteView);
-                        playRTCMain.createPlayRTCObserverInstance();
-                        playRTCMain.createPlayRTCInstance();
-                        playRTCMain.createChannel();
+                        destinationUserModel.userName=nameText.getText().toString();*/
+
 
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.app_name)
                                 .titleColor(getResources().getColor(R.color.colorPrimary))
-                                .content(FriendID+MainActivity.userID)
+                                .content("연락되라 얍")
                                 .positiveText("확인")
                                 .negativeText("취소")
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        playRTCMain.connectChannel();
-                                        Intent intent = new Intent(getActivity(),videoCall.class);
-                                       // Bundle bundle = new Bundle();
-                                       // bundle.putString("channelId",FriendID+MainActivity.userID);
-                                        //intent.putExtras(bundle);
+                                        Bundle bundle = new Bundle();
+                                        Intent intent = new Intent(getActivity(),PlayRTCMain.class);
+                                        bundle.putString("token",pushToken);
+                                        bundle.putString("name",nameText.getText().toString());
+                                        intent.putExtras(bundle);
                                         startActivity(intent);
                                         //sendFCM();
                                     }
@@ -235,14 +214,14 @@ public class FriendFragment extends Fragment {
             }
         }
 
-        void sendFCM() {
+       /* void sendFCM() {
             Gson gson =new Gson();
             NotificationModel notificationModel =new NotificationModel();
             notificationModel.to=destinationUserModel.pushToken;
             //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
             //notificationModel.notification.text="Please help me";
             notificationModel.data.title=InitApp.sUser.getDisplayName()+" requested video call to you";
-            notificationModel.data.text="Please help me";
+            notificationModel.data.text=channelId;
 
             RequestBody requestBody =RequestBody.create(MediaType.parse("application/json; charset=utf8"),gson.toJson(notificationModel));
             Request request = new Request.Builder()
@@ -263,7 +242,7 @@ public class FriendFragment extends Fragment {
 
                 }
             }));
-        }
+        }*/
     }
 
 }
