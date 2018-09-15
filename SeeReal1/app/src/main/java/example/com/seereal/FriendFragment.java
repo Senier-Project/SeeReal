@@ -212,7 +212,7 @@ public class FriendFragment extends Fragment {
 //                                    }
 //                                })
 //                                .show();
-//
+
 
 
                     }
@@ -223,7 +223,7 @@ public class FriendFragment extends Fragment {
             Gson gson =new Gson();
             NotificationModel notificationModel =new NotificationModel();
             notificationModel.to=destinationUserModel.pushToken;
-            notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
+            notificationModel.notification.title=InitApp.sUser.getDisplayName()+" requested video call to you.";
             notificationModel.notification.text="Please help me";
 
             RequestBody requestBody =RequestBody.create(MediaType.parse("application/json; charset=utf8"),gson.toJson(notificationModel));
@@ -237,7 +237,6 @@ public class FriendFragment extends Fragment {
             okHttpClient.newCall(request).enqueue((new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
                 }
 
                 @Override
