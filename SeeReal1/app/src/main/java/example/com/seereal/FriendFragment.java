@@ -1,5 +1,6 @@
 package example.com.seereal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,6 +53,10 @@ public class FriendFragment extends Fragment {
     private UserModel destinationUserModel ;
     private String requestContext;
 
+    public static PlayRTCMain playRTCMain;
+
+    private Context mContext;
+
     public static FriendFragment newInstance() {
         FriendFragment friendFragment = new FriendFragment();
         return friendFragment;
@@ -69,7 +74,7 @@ public class FriendFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
        // https:www.youtube.com/watch?v=MGOrkrLpWgYuse
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        mContext=getContext();
         //mData = new ArrayList<>();
         //ImageView  myImg = null;
         //myImg.setImageDrawable(getResources().getDrawable(R.drawable.but_call2));
@@ -179,39 +184,43 @@ public class FriendFragment extends Fragment {
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //ID만 따오기
 
+                        //ID만 따오기
                         String term = emailText.getText().toString();
                         FriendID = term.replaceAll("@gmail.com", "");
                         destinationUserModel =new UserModel();
                         destinationUserModel.pushToken=pushToken;
                         destinationUserModel.userName=nameText.getText().toString();
+                        playRTCMain = new PlayRTCMain(mContext);
+                        playRTCMain.createPlayRTCObserverInstance();
+                        playRTCMain.createPlayRTCInstance();
+                        playRTCMain.createChannel();
 
-                        sendFCM();
-//
-//                        new MaterialDialog.Builder(getActivity())
-//                                .title(R.string.app_name)
-//                                .titleColor(getResources().getColor(R.color.colorPrimary))
-//                                .content(FriendID+MainActivity.userID)
-//                                .positiveText("확인")
-//                                .negativeText("취소")
-//                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                                    @Override
-//                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                                        Intent intent = new Intent(getActivity(),PlayRTCMain.class);
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putString("channelId",FriendID+MainActivity.userID);
-//                                        intent.putExtras(bundle);
-//                                        startActivity(intent);
-//                                    }
-//                                })
-//                                .onNegative(new MaterialDialog.SingleButtonCallback() {
-//                                    @Override
-//                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                                        dialog.dismiss();
-//                                    }
-//                                })
-//                                .show();
+                        new MaterialDialog.Builder(getActivity())
+                                .title(R.string.app_name)
+                                .titleColor(getResources().getColor(R.color.colorPrimary))
+                                .content(FriendID+MainActivity.userID)
+                                .positiveText("확인")
+                                .negativeText("취소")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        playRTCMain.connectChannel();
+                                        Intent intent = new Intent(getActivity(),videoCall.class);
+                                       // Bundle bundle = new Bundle();
+                                       // bundle.putString("channelId",FriendID+MainActivity.userID);
+                                        //intent.putExtras(bundle);
+                                        startActivity(intent);
+                                        //sendFCM();
+                                    }
+                                })
+                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
 
 
 
@@ -219,12 +228,15 @@ public class FriendFragment extends Fragment {
                 });
             }
         }
+
         void sendFCM() {
             Gson gson =new Gson();
             NotificationModel notificationModel =new NotificationModel();
             notificationModel.to=destinationUserModel.pushToken;
-            notificationModel.notification.title=InitApp.sUser.getDisplayName()+" requested video call to you.";
-            notificationModel.notification.text="Please help me";
+            //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
+            //notificationModel.notification.text="Please help me";
+            notificationModel.data.title=destinationUserModel.userName+" requested video call to you";
+            notificationModel.data.text="Please help me";
 
             RequestBody requestBody =RequestBody.create(MediaType.parse("application/json; charset=utf8"),gson.toJson(notificationModel));
             Request request = new Request.Builder()
@@ -237,6 +249,7 @@ public class FriendFragment extends Fragment {
             okHttpClient.newCall(request).enqueue((new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+
                 }
 
                 @Override
@@ -246,5 +259,7 @@ public class FriendFragment extends Fragment {
             }));
         }
     }
+
+
 
 }

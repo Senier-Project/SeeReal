@@ -55,7 +55,12 @@ public class MoreFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int selected=0;
-              //  int selected = dataSnapshot.getValue(Integer.class);
+                //
+                if(dataSnapshot.getValue(Integer.class) == null){
+                    selected = 0;
+
+                }
+                selected = dataSnapshot.getValue(Integer.class);
                 //selectF = selected;
                 profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
             }
