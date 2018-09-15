@@ -37,13 +37,13 @@ public class PlayRTCMain extends AppCompatActivity {
 
     public PlayRTCObserver playrtcObserver;
     private static PlayRTC playrtc;
+    public  PlayRTCVideoView localView = null;
+    public  PlayRTCVideoView remoteView = null;
+    public  PlayRTCMedia localMedia=null;
+    public  PlayRTCMedia remoteMedia=null;
 
     public boolean isCloseActivity = false;
     public boolean isChannelConnected = false;
-    public PlayRTCVideoView localView = null;
-    public PlayRTCVideoView remoteView = null;
-    public PlayRTCMedia localMedia;
-    public PlayRTCMedia remoteMedia;
     public static String channelId;
 
     private RelativeLayout videoViewGroup;
@@ -53,140 +53,17 @@ public class PlayRTCMain extends AppCompatActivity {
     }
 */
 
-   public PlayRTCMain(Context context){
-       this.mContext= context;
+   public PlayRTCMain(){
    }
 
+   public PlayRTCMain(Context context,PlayRTCMedia localMedia, PlayRTCMedia remoteMedia, PlayRTCVideoView localView, PlayRTCVideoView remoteView){
+       this.mContext= context;
+       this.localMedia= localMedia;
+       this.remoteMedia=remoteMedia;
+       this.localView=localView;
+       this.remoteView=remoteView;
+   }
 
-  /*  //권한설정용
-    public static final String[] MANDATORY_PERMISSIONS = {
-            "android.permission.INTERNET",
-            "android.permission.CAMERA",
-            "android.permission.RECORD_AUDIO",
-            "android.permission.MODIFY_AUDIO_SETTINGS",
-            "android.permission.ACCESS_NETWORK_STATE",
-            "android.permission.CHANGE_WIFI_STATE",
-            "android.permission.ACCESS_WIFI_STATE",
-            "android.permission.READ_PHONE_STATE",
-            "android.permission.BLUETOOTH",
-            "android.permission.BLUETOOTH_ADMIN",
-            "android.permission.WRITE_EXTERNAL_STORAGE"
-    };
-*/
-
-
-  /*  @Override
-    protected void onCreate(Bundle savedInstanceState) {
-       //
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.video_call_main);
-        Log.d("PlayRTC","RTC Main 실행");
-        //풀 스크린
-
-
-        //권한설정
-        if (android.os.Build.VERSION.SDK_INT >= 23)
-        {
-            checkPermission(MANDATORY_PERMISSIONS);
-        }
-        //
-
-        createPlayRTCObserverInstance();
-
-        createPlayRTCInstance();
-
-       // setToolbar();
-      //  setFragmentNavigationDrawer();
-      //  setOnClickEventListenerToButton();
-        createChannel();
-        connectChannel();
-
-
-    }
-
-
-    //권한설정
-    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
-    @SuppressLint("NewApi")
-    private void checkPermission(String[] permissions) {
-
-        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_STORAGE:
-                int cnt = permissions.length;
-                for(int i = 0; i < cnt; i++ ) {
-
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
-
-                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
-
-                    } else {
-
-                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
-                    }
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-
-        // Make the videoView at the onWindowFocusChanged time.
-        if (hasFocus && this.localView == null) {
-            createVideoView();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        // instance release
-        if(FriendFragment.playrtc != null) {
-            // If you does not call playrtc.close(), playrtc instence is remaining every new call.
-            // playrtc instence can not used again
-            FriendFragment.playrtc.close();
-            FriendFragment.playrtc = null;
-        }
-
-        // new v2.2.6
-        if (localView != null) {
-            localView.release();
-        }
-        // new v2.2.6
-        if (remoteView != null) {
-            remoteView.release();
-        }
-
-        playrtcObserver = null;
-        android.os.Process.killProcess(android.os.Process.myPid());
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isCloseActivity) {
-            super.onBackPressed();
-        } else {
-            createCloseAlertDialog();
-            closeAlertDialog.show();
-        }
-    }*/
-
-  /*  void start() {
-        createPlayRTCObserverInstance();
-        createPlayRTCInstance();
-        createChannel();
-        connectChannel();
-    }*/
 
     public void createPlayRTCObserverInstance() {
         playrtcObserver = new PlayRTCObserver() {
@@ -319,7 +196,7 @@ public class PlayRTCMain extends AppCompatActivity {
     }
 
 
-    public void createVideoView() {
+   public void createVideoView() {
 
         RelativeLayout myVideoViewGroup = (RelativeLayout) findViewById(R.id.video_view_group);
 
@@ -332,27 +209,22 @@ public class PlayRTCMain extends AppCompatActivity {
         myViewDimensions.y = myVideoViewGroup.getHeight();
 
         if (remoteView == null) {
-            createRemoteVideoView(myViewDimensions, myVideoViewGroup);
+            createRemoteVideoView(myViewDimensions, myVideoViewGroup,remoteView);
         }
 
         if (localView == null) {
-            createLocalVideoView(myViewDimensions, myVideoViewGroup);
+            createLocalVideoView(myViewDimensions, myVideoViewGroup,localView);
         }
 
     }
 
-    public void createLocalVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup) {
+    public static void createLocalVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup,PlayRTCVideoView localView) {
         if (localView == null) {
             // Create the video size variable.
             Point myVideoSize = new Point();
             myVideoSize.x = (int) (parentViewDimensions.x * 0.3);
             myVideoSize.y = (int) (parentViewDimensions.y * 0.3);
 
-
-            //For test
-            /*TextView textView = new TextView(parentVideoViewGroup.getContext());
-            textView.setText("LOCAL");
-            setContentView(textView);*/
 
             // Create the view parameter.
             RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(myVideoSize.x, myVideoSize.y);
@@ -377,29 +249,10 @@ public class PlayRTCMain extends AppCompatActivity {
             // Add the view to the parentVideoViewGrop.
             parentVideoViewGroup.addView(localView);
 
-     /*       Button mButton = new Button(getApplicationContext());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(myVideoSize.x,myVideoSize.y);
-            params.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.setMargins(0,0,0,50);
-            mButton.setText("EXIT");
-            mButton.setBackgroundResource(R.drawable.rounded_button);
-            mButton.setLayoutParams(params);
-            mButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    createCloseAlertDialog();
-                    closeAlertDialog.show();
-                }
-            });
-            parentVideoViewGroup.addView(mButton);*/
-
-        }
+            }
     }
 
-    public void createRemoteVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup) {
+    public static void createRemoteVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup, PlayRTCVideoView remoteView) {
         if (remoteView == null) {
             // Create the video size variable.
             Point myVideoSize = new Point();
@@ -426,10 +279,29 @@ public class PlayRTCMain extends AppCompatActivity {
         }
     }
 
+    void createChannel() {
+        try {
+
+           playrtc.createChannel(new JSONObject());
+        } catch (RequiredConfigMissingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void connectChannel() {
+        try {
+            playrtc.connectChannel(channelId, new JSONObject());
+        } catch (RequiredConfigMissingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static PlayRTC getPlayRTC(){
+        return playrtc;
+    }
 
 
-
-   /* private void createCloseAlertDialog() {
+    /* private void createCloseAlertDialog() {
         // Create the Alert Builder.
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -463,26 +335,4 @@ public class PlayRTCMain extends AppCompatActivity {
         closeAlertDialog = alertDialogBuilder.create();
     }
 */
-
-    void createChannel() {
-        try {
-
-           playrtc.createChannel(new JSONObject());
-        } catch (RequiredConfigMissingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    void connectChannel() {
-        try {
-            playrtc.connectChannel(channelId, new JSONObject());
-        } catch (RequiredConfigMissingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static PlayRTC getPlayRTC(){
-        return playrtc;
-    }
-
 }

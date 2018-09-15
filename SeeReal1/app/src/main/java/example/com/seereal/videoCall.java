@@ -4,13 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.sktelecom.playrtc.PlayRTC;
+import com.sktelecom.playrtc.stream.PlayRTCMedia;
+import com.sktelecom.playrtc.util.ui.PlayRTCVideoView;
 
 import static example.com.seereal.PlayRTCMain.getPlayRTC;
 
@@ -19,7 +23,13 @@ public class videoCall extends AppCompatActivity {
 
     private Context mContext;
     private PlayRTC playRTC;
+    private PlayRTCMain playRTCMain;
 
+
+    private PlayRTCVideoView localView = null;
+    private PlayRTCVideoView remoteView = null;
+    private PlayRTCMedia localMedia;
+    private PlayRTCMedia remoteMedia;
 
 
     //public static PlayRTCMain playRTCMain;
@@ -68,7 +78,8 @@ public class videoCall extends AppCompatActivity {
         playRTCMain.createChannel();
         playRTCMain.connectChannel();*/
 
-      playRTC=getPlayRTC();
+        playRTCMain = new PlayRTCMain();
+        playRTC = getPlayRTC();
 
     }
 
@@ -107,8 +118,8 @@ public class videoCall extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
 
         // Make the videoView at the onWindowFocusChanged time.
-        if (hasFocus && FriendFragment.playRTCMain.localView == null) {
-            PlayRTCMain.createVideoView();
+        if (hasFocus && localView == null) {
+            createVideoView();
         }
     }
 
@@ -124,12 +135,12 @@ public class videoCall extends AppCompatActivity {
         }
 
         // new v2.2.6
-        if (FriendFragment.playRTCMain.localView != null) {
-            FriendFragment.playRTCMain.localView.release();
+        if (localView != null) {
+            localView.release();
         }
         // new v2.2.6
-        if (FriendFragment.playRTCMain.remoteView != null) {
-            FriendFragment.playRTCMain.remoteView.release();
+        if (remoteView != null) {
+            remoteView.release();
         }
 
         FriendFragment.playRTCMain.playrtcObserver = null;
@@ -145,6 +156,30 @@ public class videoCall extends AppCompatActivity {
             createCloseAlertDialog();
             closeAlertDialog.show();
         }
+    }
+
+
+
+    public void createVideoView() {
+
+        RelativeLayout myVideoViewGroup = (RelativeLayout) findViewById(R.id.video_view_group);
+
+        if (localView != null) {
+            return;
+        }
+
+        Point myViewDimensions = new Point();
+        myViewDimensions.x = myVideoViewGroup.getWidth();
+        myViewDimensions.y = myVideoViewGroup.getHeight();
+
+        if (remoteView == null) {
+            PlayRTCMain.createRemoteVideoView(myViewDimensions, myVideoViewGroup,remoteView);
+        }
+
+        if (localView == null) {
+           PlayRTCMain.createLocalVideoView(myViewDimensions, myVideoViewGroup,localView);
+        }
+
     }
 
     private void createCloseAlertDialog() {
@@ -180,5 +215,7 @@ public class videoCall extends AppCompatActivity {
         // Create the Alert.
         closeAlertDialog = alertDialogBuilder.create();
     }
+
+
 
 }

@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.sktelecom.playrtc.stream.PlayRTCMedia;
+import com.sktelecom.playrtc.util.ui.PlayRTCVideoView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +58,10 @@ public class FriendFragment extends Fragment {
     public static PlayRTCMain playRTCMain;
 
     private Context mContext;
+    public PlayRTCVideoView localView = null;
+    public PlayRTCVideoView remoteView = null;
+    public PlayRTCMedia localMedia;
+    public PlayRTCMedia remoteMedia;
 
     public static FriendFragment newInstance() {
         FriendFragment friendFragment = new FriendFragment();
@@ -191,7 +197,7 @@ public class FriendFragment extends Fragment {
                         destinationUserModel =new UserModel();
                         destinationUserModel.pushToken=pushToken;
                         destinationUserModel.userName=nameText.getText().toString();
-                        playRTCMain = new PlayRTCMain(mContext);
+                        playRTCMain = new PlayRTCMain(mContext,localMedia,remoteMedia,localView,remoteView);
                         playRTCMain.createPlayRTCObserverInstance();
                         playRTCMain.createPlayRTCInstance();
                         playRTCMain.createChannel();
@@ -235,7 +241,7 @@ public class FriendFragment extends Fragment {
             notificationModel.to=destinationUserModel.pushToken;
             //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
             //notificationModel.notification.text="Please help me";
-            notificationModel.data.title=destinationUserModel.userName+" requested video call to you";
+            notificationModel.data.title=InitApp.sUser.getDisplayName()+" requested video call to you";
             notificationModel.data.text="Please help me";
 
             RequestBody requestBody =RequestBody.create(MediaType.parse("application/json; charset=utf8"),gson.toJson(notificationModel));
@@ -259,7 +265,5 @@ public class FriendFragment extends Fragment {
             }));
         }
     }
-
-
 
 }
