@@ -17,6 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk true
+        }
+    }
 }
 
 dependencies {
@@ -35,6 +43,11 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+
 
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation ('com.github.afollestad.material-dialogs:core:0.8.5.8@aar'){
@@ -42,4 +55,5 @@ dependencies {
     }
 
 }
+
 apply plugin: 'com.google.gms.google-services'
