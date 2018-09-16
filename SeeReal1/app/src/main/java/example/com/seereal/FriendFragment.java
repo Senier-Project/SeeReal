@@ -214,35 +214,7 @@ public class FriendFragment extends Fragment {
             }
         }
 
-       /* void sendFCM() {
-            Gson gson =new Gson();
-            NotificationModel notificationModel =new NotificationModel();
-            notificationModel.to=destinationUserModel.pushToken;
-            //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
-            //notificationModel.notification.text="Please help me";
-            notificationModel.data.title=InitApp.sUser.getDisplayName()+" requested video call to you";
-            notificationModel.data.text=channelId;
 
-            RequestBody requestBody =RequestBody.create(MediaType.parse("application/json; charset=utf8"),gson.toJson(notificationModel));
-            Request request = new Request.Builder()
-                    .header("Content-Type","application/json")
-                    .addHeader("Authorization","key=AIzaSyA3Bv1IEgeHVEGLajuQ0c7uaPe9ERPMMaI")
-                    .url("https://fcm.googleapis.com/fcm/send")
-                    .post(requestBody)
-                    .build();
-            OkHttpClient okHttpClient =new OkHttpClient();
-            okHttpClient.newCall(request).enqueue((new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-
-                }
-            }));
-        }*/
     }
 
 }
