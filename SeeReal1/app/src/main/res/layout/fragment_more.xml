@@ -16,22 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="100dp">
 
-
             <TextView
                 android:id="@+id/user_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:textSize="20dp"
                 android:text="testName"
                 android:textStyle="bold"
                 android:gravity="center"
                 />
+            <ImageView
+                android:id="@+id/image_profile"
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/user_id"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/profile_0"
+               />
+
+
             <TextView
                 android:id="@+id/user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_id"
+                android:layout_alignLeft="@+id/user_id"
                 android:layout_centerInParent="true"
                 android:text="testEmail@gmail.com"
                 android:gravity="center"

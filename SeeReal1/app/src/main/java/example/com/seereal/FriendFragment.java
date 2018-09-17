@@ -1,5 +1,6 @@
 package example.com.seereal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -35,7 +37,14 @@ public class FriendFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<FriendData> mData;
 
-    private String FriendID;
+   private int mProfileImg;
+
+
+    private UserModel destinationUserModel ;
+    private String requestContext;
+
+    private Context mContext;
+
 
     public static FriendFragment newInstance() {
         FriendFragment friendFragment = new FriendFragment();
@@ -52,9 +61,9 @@ public class FriendFragment extends Fragment {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.friendListVIew);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
-        https:
-//www.youtube.com/watch?v=MGOrkrLpWgYuse
+       // https:www.youtube.com/watch?v=MGOrkrLpWgYuse
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mContext=getContext();
 
         //mData = new ArrayList<>();
         //ImageView  myImg = null;
@@ -90,23 +99,21 @@ public class FriendFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     items.clear();
-                    /*friendData = new FriendData("수화");
-        friendData.setImage(R.drawable.imagesu);
-        mData.add(friendData);
-           String value = dataSnapshot.getValue(String.class);
 
-           mDatabase.child("Test").child("aaa");
-           dataSnapshot.getValue(String.class);
-        */
                     FriendData friendData;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         // Log.d("susu","name"+snapshot.child("name").getValue(String.class));
-                        //  Log.d("susu","email"+snapshot.child("email"));
+                        //  Log.d("susu","email"+snapshot.child("email")); setImageResource(Utils.getProfileImgDrawable(selected));
 
                         String Fname = snapshot.child("name").getValue(String.class);
                         String Femail = snapshot.child("email").getValue(String.class);
-
-                        friendData = new FriendData(Fname, Femail);
+                        String Ftoken = snapshot.child("pushToken").getValue(String.class);
+                        Log.d("susu","SS!! name"+Fname+"  / Femail"+Femail);
+                        Integer Fimg = snapshot.child("img").getValue(Integer.class);
+                       if(Fimg == null)
+                           Fimg = 0;
+                        //int Fimg= 2;
+                        friendData = new FriendData(Fname, Femail, Fimg,Ftoken);
 
                         items.add(friendData);
                     }
@@ -136,6 +143,8 @@ public class FriendFragment extends Fragment {
 
             holder.nameText.setText(friendData.getName());
             holder.emailText.setText(friendData.getEmail());
+            holder.img.setImageResource(Utils.getProfileImgDrawable(friendData.getImg()));
+            holder.pushToken=friendData.getToken();
         }
 
         @Override
@@ -143,18 +152,19 @@ public class FriendFragment extends Fragment {
             return items.size();
         }
 
-
         class ViewHolder extends RecyclerView.ViewHolder {
             public final TextView nameText;
             public final TextView emailText;
-            //public final ImageView img;
+            public final ImageView img;
             public final Button callBtn;
+            public String pushToken;
             //public final TextView ageText;
 
             public ViewHolder(View view) {
                 super(view);
 
-                //img = (ImageView) view.findViewById(R.id.image_friend);
+                img = (ImageView) view.findViewById(R.id.image_friend);
+
                 nameText = (TextView) view.findViewById(R.id.name);
                 emailText = (TextView) view.findViewById(R.id.email);
                 callBtn = (Button) view.findViewById(R.id.but_ar);
@@ -164,26 +174,29 @@ public class FriendFragment extends Fragment {
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //ID만 따오기
 
-                        String term = emailText.getText().toString();
-                        FriendID = term.replaceAll("@gmail.com", "");
+
+                        /*destinationUserModel =new UserModel();
+                        destinationUserModel.pushToken=pushToken;
+                        destinationUserModel.userName=nameText.getText().toString();*/
 
 
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.app_name)
                                 .titleColor(getResources().getColor(R.color.colorPrimary))
-                                .content(FriendID+MainActivity.userID)
+                                .content("연락되라 얍")
                                 .positiveText("확인")
                                 .negativeText("취소")
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        Intent intent = new Intent(getActivity(),PlayRTCMain.class);
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("channelId",FriendID+MainActivity.userID);
+                                        Intent intent = new Intent(getActivity(),PlayRTCMain.class);
+                                        bundle.putString("token",pushToken);
+                                        bundle.putString("name",nameText.getText().toString());
                                         intent.putExtras(bundle);
                                         startActivity(intent);
+                                        //sendFCM();
                                     }
                                 })
                                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -200,6 +213,8 @@ public class FriendFragment extends Fragment {
                 });
             }
         }
+
+
     }
 
 }

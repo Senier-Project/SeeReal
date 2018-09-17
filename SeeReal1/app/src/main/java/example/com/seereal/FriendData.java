@@ -3,7 +3,8 @@ package example.com.seereal;
 public class FriendData {
     private String name;
     private  String email;
-    //private int img;
+    private int img;
+    private String token;
    // private String age;
 
     public FriendData(String name)//, String age) {
@@ -17,6 +18,21 @@ public class FriendData {
         this.email = email;
         //   this.age = age;
     }
+    public FriendData(String name, String email, int img) {
+
+        this.img = img;
+        this.name = name;
+        this.email = email;
+        //   this.age = age;
+    }
+    public FriendData(String name, String email, int img,String token) {
+
+        this.img = img;
+        this.name = name;
+        this.email = email;
+        //   this.age = age;
+        this.token =token;
+    }
     public String getName() {
         return this.name;
     }
@@ -29,15 +45,9 @@ public class FriendData {
     public void setEmail (String email){
         this.email = email;
     }
-
-    /*
-    public int getImg() {
-        return img;
-    }
-
-    public void setImage(int img) {       this.img = img;    }
-    * */
-
+    public int getImg() { return img; }
+    public void setImage(int img) {  this.img = img; }
+    public String getToken() {return this.token;}
 
 
 
