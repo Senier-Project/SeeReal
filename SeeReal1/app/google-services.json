@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:663655734368:android:5920de3503a2d18c",
+        "android_client_info": {
+          "package_name": "com.google.firebase.quickstart.fcm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663655734368-novqermnum8qda03qptsalq3nm79ffq3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.firebase.quickstart.fcm",
+            "certificate_hash": "e967149552e31553acaf9b0c8644ff531baa9f2c"
+          }
+        },
+        {
+          "client_id": "663655734368-tf72j81mccgac0vb3qqscfmj1pjb30dr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaPdNOfrHfVk-ukbg_3dPlGOcDP3LYWI4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663655734368-tf72j81mccgac0vb3qqscfmj1pjb30dr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:663655734368:android:32721b0d55c468ce",
         "android_client_info": {
           "package_name": "example.com.seereal"
@@ -28,6 +72,22 @@
           "android_info": {
             "package_name": "example.com.seereal",
             "certificate_hash": "5c9cd0c240472691665daa8053aada41c1e493b6"
+          }
+        },
+        {
+          "client_id": "663655734368-vo8ftg2asicdcotspkqobo70sje32m5l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "example.com.seereal",
+            "certificate_hash": "e967149552e31553acaf9b0c8644ff531baa9f2c"
+          }
+        },
+        {
+          "client_id": "663655734368-pgs1fnc5ljneevn2kb77db6b3ccgu6gf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "example.com.seereal",
+            "certificate_hash": "031706e2ee7b9aa41ba521d8bb04b125ca327ebc"
           }
         },
         {
