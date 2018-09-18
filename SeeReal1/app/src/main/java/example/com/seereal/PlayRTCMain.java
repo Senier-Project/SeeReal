@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -46,7 +47,7 @@ import okhttp3.Response;
 public class PlayRTCMain extends AppCompatActivity {
 
     private Context mContext;
-    private String MY_PROJECT_ID = "073e71ce-4092-4702-94b8-eab8784f6579";
+    private String MY_PROJECT_ID = "60ba608a-e228-4530-8711-fa38004719c1";
 
     private UserModel destinationUserModel;
     private AlertDialog closeAlertDialog;
@@ -88,6 +89,8 @@ public class PlayRTCMain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.video_call_main);
         Log.d("PlayRTC", "RTC Main 실행");
 
@@ -418,8 +421,8 @@ public class PlayRTCMain extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton(R.string.alert_positive, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int id) {
                 dialogInterface.dismiss();
-                //Intent intent = new Intent(PlayRTCMain.this,MainActivity.class);
-                //startActivity(intent);
+
+
                 if (isChannelConnected == true) {
                     isCloseActivity = false;
 
@@ -430,6 +433,7 @@ public class PlayRTCMain extends AppCompatActivity {
                     isCloseActivity = true;
                     onBackPressed();
                 }
+
             }
         });
         alertDialogBuilder.setNegativeButton(R.string.alert_negative, new DialogInterface.OnClickListener() {
