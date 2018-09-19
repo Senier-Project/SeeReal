@@ -22,11 +22,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -40,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     private Toast toast;
     private SignInButton signInButton; //구글 로그인 버튼
     private GoogleApiClient mGoogleApiClient; //API 클라이언트
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +42,12 @@ public class LoginActivity extends AppCompatActivity {
         //mAuth = FirebaseAuth.getInstance(); // 인스턴스 생성
 
 
-        // InitApp.sUser = InitApp.sAuth.getCurrentUser();
+       // InitApp.sUser = InitApp.sAuth.getCurrentUser();
         InitApp.sAuth = FirebaseAuth.getInstance();
         toast = Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT);
         //DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        // DatabaseReference mData = mDatabase.child("users").child(InitApp.sUser.getUid()).child("img");
-        // final int imgNum;
+       // DatabaseReference mData = mDatabase.child("users").child(InitApp.sUser.getUid()).child("img");
+       // final int imgNum;
 
 
         mListener = new FirebaseAuth.AuthStateListener() {
@@ -63,10 +57,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // 인증된 유저가 존재할 경우 바로 Main액티비티로 넘긴 후 SignIn액티비티는 종료.
                 if (InitApp.sUser != null) {
-                    toast.setText(InitApp.sUser.getDisplayName() + "님 환영합니다.");
+toast.setText(InitApp.sUser.getDisplayName() + "님 환영합니다.");
                     toast.show();
-
-                    passPushTokenToServer();
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
@@ -79,17 +71,11 @@ public class LoginActivity extends AppCompatActivity {
         };
 
 
+
+
     }
 
-    private void passPushTokenToServer() {
-        String uid=InitApp.sUser.getUid();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Map<String,Object> map = new HashMap<>();
-        map.put("pushToken",token);
-        FirebaseDatabase.getInstance().getReference().child("users").child(uid).updateChildren(map);
-    }
-
-    private void initLogin() {
+    private void initLogin () {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -106,7 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
 
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+
+        signInButton = (SignInButton)findViewById(R.id.sign_in_button);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     @Override
@@ -158,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
         }*/
 
 
+
+
     }
 
     @Override
@@ -197,5 +187,4 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
-    }
-}
+    }}

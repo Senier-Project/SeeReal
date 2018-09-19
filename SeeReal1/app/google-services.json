@@ -91,14 +91,6 @@
           }
         },
         {
-          "client_id": "663655734368-hsmqtr4q2mfsjji3ks52uv0gp93na7ca.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "example.com.seereal",
-            "certificate_hash": "1d75bccd5f2ee06edc0b4cb1231e6950c94ce7f6"
-          }
-        },
-        {
           "client_id": "663655734368-tf72j81mccgac0vb3qqscfmj1pjb30dr.apps.googleusercontent.com",
           "client_type": 3
         }
