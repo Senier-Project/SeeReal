@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,6 +21,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import static android.support.constraint.Constraints.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -46,13 +48,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String title, String text) {
-        PlayRTCMain.isReceived=true;
+        ReceivedSingleton.getInstance().onReceived();
+        //PlayRTCMain.isReceived=true;
         Bundle bundle =new Bundle();
         bundle.putString("id",text);
         Intent intent = new Intent(this, PlayRTCMain.class);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);
