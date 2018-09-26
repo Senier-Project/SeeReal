@@ -8,42 +8,48 @@ import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.sktelecom.playrtc.PlayRTC;
 import com.sktelecom.playrtc.PlayRTCFactory;
-//playrtc v2.2.0
+import com.sktelecom.playrtc.config.PlayRTCAudioConfig.AudioCodec;
 import com.sktelecom.playrtc.config.PlayRTCConfig;
-//playrtc v2.2.0
-import com.sktelecom.playrtc.config.PlayRTCVideoConfig.CameraType;
-
+import com.sktelecom.playrtc.config.PlayRTCVideoConfig;
+import com.sktelecom.playrtc.config.PlayRTCVideoConfig.VideoCodec;
 import com.sktelecom.playrtc.exception.RequiredConfigMissingException;
 import com.sktelecom.playrtc.exception.RequiredParameterMissingException;
 import com.sktelecom.playrtc.exception.UnsupportedPlatformVersionException;
 import com.sktelecom.playrtc.observer.PlayRTCObserver;
 import com.sktelecom.playrtc.stream.PlayRTCMedia;
 import com.sktelecom.playrtc.util.ui.PlayRTCVideoView;
-import com.sktelecom.playrtc.config.PlayRTCAudioConfig.AudioCodec;
-import com.sktelecom.playrtc.config.PlayRTCVideoConfig.VideoCodec;
 
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+//playrtc v2.2.0
+//playrtc v2.2.0
 
 public class PlayRTCMain extends AppCompatActivity {
 
     private Context mContext;
-    private String MY_PROJECT_ID = "073e71ce-4092-4702-94b8-eab8784f6579";
+    private String MY_PROJECT_ID = "60ba608a-e228-4530-8711-fa38004719c1";
 
-    private Toolbar toolbar;
+    private UserModel destinationUserModel;
     private AlertDialog closeAlertDialog;
 
     private PlayRTCObserver playrtcObserver;
@@ -56,84 +62,49 @@ public class PlayRTCMain extends AppCompatActivity {
     private PlayRTCMedia localMedia;
     private PlayRTCMedia remoteMedia;
     private String channelId;
+    private String receivedId;
 
+   // public static boolean isReceived = false;
     private RelativeLayout videoViewGroup;
 
-    //권한설정용
-    public static final String[] MANDATORY_PERMISSIONS = {
-            "android.permission.INTERNET",
-            "android.permission.CAMERA",
-            "android.permission.RECORD_AUDIO",
-            "android.permission.MODIFY_AUDIO_SETTINGS",
-            "android.permission.ACCESS_NETWORK_STATE",
-            "android.permission.CHANGE_WIFI_STATE",
-            "android.permission.ACCESS_WIFI_STATE",
-            "android.permission.READ_PHONE_STATE",
-            "android.permission.BLUETOOTH",
-            "android.permission.BLUETOOTH_ADMIN",
-            "android.permission.WRITE_EXTERNAL_STORAGE"
-    };
+    private String pushToken;
+    private String name;
 
-    private String ChannelId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.video_call_main);
-        Log.d("PlayRTC","RTC Main 실행");
+        Log.d("PlayRTC", "RTC Main 실행");
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        ChannelId = bundle.getString("channelId");
-       // Log.d("PlayRTC",ChannelId);
+        pushToken = bundle.getString("token");
+        name = bundle.getString("name");
+        receivedId = bundle.getString("id");
+        Log.d("JJ", "받은 채널 " + receivedId);
 
-        //권한설정
-        if (android.os.Build.VERSION.SDK_INT >= 23)
-        {
-            checkPermission(MANDATORY_PERMISSIONS);
-        }
-        //
+
+        destinationUserModel = new UserModel();
+        destinationUserModel.pushToken = pushToken;
+        destinationUserModel.userName = name;
 
         createPlayRTCObserverInstance();
-
         createPlayRTCInstance();
-
-        setToolbar();
-      //  setFragmentNavigationDrawer();
-      //  setOnClickEventListenerToButton();
+        if (ReceivedSingleton.getInstance().instanceOf(true))
+            createChannel();
+        else
+            connectChannel(receivedId);
 
     }
 
-    //권한설정
-    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
-    @SuppressLint("NewApi")
-    private void checkPermission(String[] permissions) {
-
-        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
-    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_STORAGE:
-                int cnt = permissions.length;
-                for(int i = 0; i < cnt; i++ ) {
-
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
-
-                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
-
-                    } else {
-
-                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
-                    }
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
+    public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
         // Make the videoView at the onWindowFocusChanged time.
@@ -146,7 +117,7 @@ public class PlayRTCMain extends AppCompatActivity {
     protected void onDestroy() {
 
         // instance release
-        if(playrtc != null) {
+        if (playrtc != null) {
             // If you does not call playrtc.close(), playrtc instence is remaining every new call.
             // playrtc instence can not used again
             playrtc.close();
@@ -169,6 +140,7 @@ public class PlayRTCMain extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (isCloseActivity) {
             super.onBackPressed();
         } else {
@@ -178,32 +150,41 @@ public class PlayRTCMain extends AppCompatActivity {
     }
 
     private void createPlayRTCObserverInstance() {
+
         playrtcObserver = new PlayRTCObserver() {
 
             @Override
             public void onConnectChannel(final PlayRTC obj, final String channelId, final String channelCreateReason, final String channelType) {
-                super.onConnectChannel(obj,channelId,channelCreateReason,channelType);
+                super.onConnectChannel(obj, channelId, channelCreateReason, channelType);
                 isChannelConnected = true;
+                Log.d("JJ", "옵저버인스턴스에서 채널 아이디 " + channelId);
+                sendFCM();
 
                 // Fill the channelId to the channel_id TextView.
-                TextView channelIdTextView = (TextView) findViewById(R.id.channel_id);
-                channelIdTextView.setText(channelId);
+
+
             }
 
             @Override
             public void onAddLocalStream(final PlayRTC obj, final PlayRTCMedia playRTCMedia) {
-                super.onAddLocalStream(obj,playRTCMedia);
+                super.onAddLocalStream(obj, playRTCMedia);
                 localMedia = playRTCMedia;
 
+                long delayTime = 0;
+
+                localView.show(delayTime);
                 // Link the media stream to the view.
                 playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
             }
 
             @Override
             public void onAddRemoteStream(final PlayRTC obj, final String peerId, final String peerUserId, final PlayRTCMedia playRTCMedia) {
-                super.onAddRemoteStream(obj,peerId,peerUserId,playRTCMedia);
+                super.onAddRemoteStream(obj, peerId, peerUserId, playRTCMedia);
                 remoteMedia = playRTCMedia;
 
+                long delayTime = 0;
+
+                remoteView.show(delayTime);
                 // Link the media stream to the view.
                 playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
 
@@ -211,20 +192,17 @@ public class PlayRTCMain extends AppCompatActivity {
 
             @Override
             public void onDisconnectChannel(final PlayRTC obj, final String disconnectReason) {
-                super.onDisconnectChannel(obj,disconnectReason);
+                super.onDisconnectChannel(obj, disconnectReason);
                 isChannelConnected = false;
+                ReceivedSingleton.getInstance().reset();
 
                 // v2.2.5
                 localView.bgClearColor();
                 remoteView.bgClearColor();
 
-                // Clean the channel_id TextView.
-                TextView ChannelIdTextView = (TextView) findViewById(R.id.channel_id);
-                ChannelIdTextView.setText(null);
-
                 // Create PlayRTCMain instance again.
                 // Because at the disconnect moment, the PlayRTCMain instance has removed.
-                createPlayRTCInstance();
+                 createPlayRTCInstance();
             }
 
 //            @Override
@@ -238,13 +216,15 @@ public class PlayRTCMain extends AppCompatActivity {
         };
     }
 
-    private void createPlayRTCInstance () {
+    private void createPlayRTCInstance() {
         try {
             PlayRTCConfig config = createPlayRTCConfig();
             playrtc = PlayRTCFactory.createPlayRTC(config, playrtcObserver);
         } catch (UnsupportedPlatformVersionException e) {
             e.printStackTrace();
         } catch (RequiredParameterMissingException e) {
+            e.printStackTrace();
+        } catch (AssertionError e) {
             e.printStackTrace();
         }
     }
@@ -261,8 +241,7 @@ public class PlayRTCMain extends AppCompatActivity {
          * - Front
          * - Back
          */
-        config.video.setCameraType(CameraType.Back);
-
+        config.video.setCameraType(PlayRTCVideoConfig.CameraType.Front);
 
         /*
          * enum VideoCodec
@@ -272,12 +251,9 @@ public class PlayRTCMain extends AppCompatActivity {
          */
         config.video.setPreferCodec(VideoCodec.VP8);
 
-
         // default resolution 640x480
         config.video.setMaxFrameSize(640, 480);
         config.video.setMinFrameSize(640, 480);
-
-
 
 
         config.audio.setEnable(true);   /* send audio stream */
@@ -290,7 +266,6 @@ public class PlayRTCMain extends AppCompatActivity {
          * - OPUS
          */
         config.audio.setPreferCodec(AudioCodec.OPUS);
-
 
         config.data.setEnable(true);    /* use datachannel stream */
 
@@ -309,13 +284,11 @@ public class PlayRTCMain extends AppCompatActivity {
         return config;
     }
 
-
-
-    private void createVideoView(){
+    private void createVideoView() {
 
         RelativeLayout myVideoViewGroup = (RelativeLayout) findViewById(R.id.video_view_group);
 
-        if(localView != null){
+        if (localView != null) {
             return;
         }
 
@@ -323,33 +296,28 @@ public class PlayRTCMain extends AppCompatActivity {
         myViewDimensions.x = myVideoViewGroup.getWidth();
         myViewDimensions.y = myVideoViewGroup.getHeight();
 
-        if(remoteView == null){
-           // createRemoteVideoView(myViewDimensions,myVideoViewGroup);
+        if (remoteView == null) {
+            createRemoteVideoView(myViewDimensions, myVideoViewGroup);
         }
 
-        if(localView == null){
-            createLocalVideoView(myViewDimensions,myVideoViewGroup);
+        if (localView == null) {
+            createLocalVideoView(myViewDimensions, myVideoViewGroup);
         }
-
     }
 
     private void createLocalVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup) {
         if (localView == null) {
             // Create the video size variable.
             Point myVideoSize = new Point();
-            myVideoSize.x = (int) (parentViewDimensions.x);
-            myVideoSize.y = (int) (parentViewDimensions.y);
+            myVideoSize.x = (int) (parentViewDimensions.x * 0.3);
+            myVideoSize.y = (int) (parentViewDimensions.y * 0.3);
 
-            //For test
-            /*TextView textView = new TextView(parentVideoViewGroup.getContext());
-            textView.setText("LOCAL");
-            setContentView(textView);*/
 
             // Create the view parameter.
             RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(myVideoSize.x, myVideoSize.y);
             param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            //param.setMargins(30, 30, 30, 30);
+            param.setMargins(30, 30, 30, 30);
 
             // Create the localViews.
             // new v2.2.6
@@ -367,8 +335,6 @@ public class PlayRTCMain extends AppCompatActivity {
 
             // Add the view to the parentVideoViewGrop.
             parentVideoViewGroup.addView(localView);
-
-
         }
     }
 
@@ -399,63 +365,6 @@ public class PlayRTCMain extends AppCompatActivity {
         }
     }
 
-    private void setOnClickEventListenerToButton() {
-        // Add a create channel event listener.
-        Button createButton = (Button) findViewById(R.id.create_button);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                try {
-//                    JSONObject obj = new JSONObject();
-//                    JSONObject peer = new JSONObject();
-//
-//                    peer.put("uid", "userId");
-//                    obj.put("peer", peer);
-//
-//                    playrtc.createChannel(obj);
-                    playrtc.createChannel(new JSONObject());
-                } catch (RequiredConfigMissingException e) {
-                    e.printStackTrace();
-                }
-//                catch (JSONException e){
-//                    e.printStackTrace();;
-//                }
-            }
-        });
-
-        // Add a connect channel event listener.
-        Button connectButton = (Button) findViewById(R.id.connect_button);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                try {
-                    TextView ChannelIdInput = (TextView) findViewById(R.id.connect_channel_id);
-                    channelId = ChannelIdInput.getText().toString();
-                    playrtc.connectChannel(channelId, new JSONObject());
-                } catch (RequiredConfigMissingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // Add a exit channel event listener.
-        Button exitButton = (Button) findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                playrtc.deleteChannel();
-            }
-        });
-    }
-
-    private void setToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-    }
-
-    private void setFragmentNavigationDrawer() {
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-    }
-
     private void createCloseAlertDialog() {
         // Create the Alert Builder.
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -466,17 +375,19 @@ public class PlayRTCMain extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton(R.string.alert_positive, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int id) {
                 dialogInterface.dismiss();
-               // Intent intent = new Intent(PlayRTCMain.this,MainActivity.class);
-               // startActivity(intent);
+
+
                 if (isChannelConnected == true) {
                     isCloseActivity = false;
 
                     // null means my user id.
                     playrtc.disconnectChannel(null);
+
                 } else {
                     isCloseActivity = true;
                     onBackPressed();
                 }
+
             }
         });
         alertDialogBuilder.setNegativeButton(R.string.alert_negative, new DialogInterface.OnClickListener() {
@@ -490,7 +401,52 @@ public class PlayRTCMain extends AppCompatActivity {
         closeAlertDialog = alertDialogBuilder.create();
     }
 
+    private void createChannel() {
+        try {
+            playrtc.createChannel(new JSONObject());
+            ReceivedSingleton.getInstance().reset();
 
+        } catch (RequiredConfigMissingException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void connectChannel(String channel) {
+        try {
+            playrtc.connectChannel(channel, new JSONObject());
 
+        } catch (RequiredConfigMissingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void sendFCM() {
+        Gson gson = new Gson();
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.to = destinationUserModel.pushToken;
+        //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
+        //notificationModel.notification.text="Please help me";
+        notificationModel.data.title = InitApp.sUser.getDisplayName() + " requested video call to you";
+        notificationModel.data.text = playrtc.getChannelId();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
+        Request request = new Request.Builder()
+                .header("Content-Type", "application/json")
+                .addHeader("Authorization", "key=AIzaSyA3Bv1IEgeHVEGLajuQ0c7uaPe9ERPMMaI")
+                .url("https://fcm.googleapis.com/fcm/send")
+                .post(requestBody)
+                .build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue((new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+            }
+        }));
+    }
 }

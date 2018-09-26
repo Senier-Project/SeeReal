@@ -1,6 +1,8 @@
 package example.com.seereal;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -48,17 +50,30 @@ public class MainActivity extends AppCompatActivity
 
     TextView userName, userEmail;
     ImageView profileImg;
-    //ImageView testStorage;
     private FirebaseAuth.AuthStateListener mListener;
 
-
+    TextView testText;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     public static int width;
     public static int height;
 
-    public static String userID;
+
+    //권한설정용
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.CAMERA",
+            "android.permission.RECORD_AUDIO",
+            "android.permission.MODIFY_AUDIO_SETTINGS",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.BLUETOOTH",
+            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+    };
 
 
     @Override
@@ -75,22 +90,37 @@ public class MainActivity extends AppCompatActivity
 
 
         InitApp.sAuth.addAuthStateListener(mListener);
-        Log.d("susu","uid"+uid);
+        Log.d("susu", "uid" + uid);
+        /*
+       mData.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.getValue(String.class);
+                testText.setText(name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w( "Failed to read value.", databaseError.toException());
+            }
+        });*/
+
 
     }
+
     //  TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d("susu","onCreate");
+        Log.d("susu", "onCreate");
 
         setFirebase();
 
-        //testStorage = (ImageView) findViewById(R.id.testStorage);
+        testText = (TextView) findViewById(R.id.testText);
 
         Display display = getWindowManager().getDefaultDisplay();
-        Point size= new Point();
+        Point size = new Point();
         display.getSize(size);
         width = size.x;
         height = size.y;
@@ -120,25 +150,25 @@ public class MainActivity extends AppCompatActivity
                 mDrawerLayout.closeDrawers();
 
                 int id = item.getItemId();
-                switch(id){
-                    case R.id.nav_notify :
+                switch (id) {
+                    case R.id.nav_notify:
                         Toast.makeText(MainActivity.this, "공지사항", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.nav_myPage :
+                    case R.id.nav_myPage:
                         Toast.makeText(MainActivity.this, "마이페이지", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, MyPageActivity.class));
                         break;
-                    case R.id.nav_setting :
+                    case R.id.nav_setting:
                         Toast.makeText(MainActivity.this, "설정", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.nav_sign_out :
+                    case R.id.nav_sign_out:
                         Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
                         //FirebaseAuth.getInstance().signOut();
                         signOut();
                         break;
-                    case R.id.nav_info :
+                    case R.id.nav_info:
                         Toast.makeText(MainActivity.this, "개발자정보", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(),InfoActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -147,41 +177,11 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        /*
-        //FirebaseStorage
-
-        String folderName = "vehicle";
-        String imageName = "susu.jpg";
-
-        // Storage 이미지 다운로드 경로
-        String storagePath = folderName + "/" + imageName;
-        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        StorageReference imageRef = mStorageRef.child(storagePath);
-
-        try {
-            // Storage 에서 다운받아 저장시킬 임시파일
-            final File imageFile = File.createTempFile("images", "jpg");
-            imageRef.getFile(imageFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // Success Case
-                    Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getPath());
-                    testStorage.setImageBitmap(bitmapImage);
-                    Toast.makeText(getApplicationContext(), "Success !!", Toast.LENGTH_LONG).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Fail Case
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Fail !!", Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+        //권한설정
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            checkPermission(MANDATORY_PERMISSIONS);
         }
-*/
+        //
 
     }
 
@@ -215,59 +215,73 @@ public class MainActivity extends AppCompatActivity
 
 
     public void setFirebase() {
-        Log.d("susu","firebase처음");
+        Log.d("susu", "firebase처음");
         InitApp.sDatabase = FirebaseDatabase.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 InitApp.sUser = InitApp.sAuth.getCurrentUser();
-                Log.d("susu","setFirebase들어옴");
+                Log.d("susu", "setFirebase들어옴");
                 // 유저가 없다고 확인될 경우, 액티비티를 종료하고 로그인 액티비티로 넘어감.
-                if (InitApp.sUser == null) {
-                    Toast.makeText(MainActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    // 유저가 존재할 경우, Drawer 헤더에 유저 정보 표시.
-                    //Log.d("susu","userName"+InitApp.sUser.getDisplayName());
-                    userName = (TextView) findViewById(R.id.userName);
-                    userEmail = (TextView) findViewById(R.id.userEmail);
-                    profileImg = (ImageView) findViewById(R.id.imageView);
 
-                    userName.setText(InitApp.sUser.getDisplayName());
-                    userEmail.setText(InitApp.sUser.getEmail());
-
-                    //profileImg.setImageResource(Utils.getProfileImgDrawable(((InitApp) getApplication()).getProfileImg()));
-                    //(InitApp) getApplication()).getProfileImg())
-
-                    // Log.d("susu","initApp"+((InitApp) getApplication()).getProfileImg());
-
-                    DatabaseReference mDatabase = InitApp.sDatabase.getReference();
-                    String uid = InitApp.sUser.getUid();
-                    DatabaseReference mData = mDatabase.child("users").child(uid).child("img");
+                try {
+                    if (InitApp.sUser == null) {
+                        Toast.makeText(MainActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        // 유저가 존재할 경우, Drawer 헤더에 유저 정보 표시.
+                        //Log.d("susu","userName"+InitApp.sUser.getDisplayName());
+                        userName = (TextView) findViewById(R.id.userName);
+                        userEmail = (TextView) findViewById(R.id.userEmail);
+                        profileImg = (ImageView) findViewById(R.id.imageView);
 
 
-                    mData.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            int selected = dataSnapshot.getValue(Integer.class);
-                            //selectF = selected;
-                            profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
-                        }
+                        userName.setText(InitApp.sUser.getDisplayName());
+                        userEmail.setText(InitApp.sUser.getEmail());
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.w( "Failed to read value.", databaseError.toException());
-                        }
-                    });
 
-                    // profileImg.setImageResource(R.drawable.profile_0);
+                        //profileImg.setImageResource(Utils.getProfileImgDrawable(((InitApp) getApplication()).getProfileImg()));
+                        //(InitApp) getApplication()).getProfileImg())
 
-                    //사용자 ID 받기
-                    userID = userEmail.getText().toString().replaceAll("@gmail.com","");
+                        // Log.d("susu","initApp"+((InitApp) getApplication()).getProfileImg());
+
+                        DatabaseReference mDatabase = InitApp.sDatabase.getReference();
+                        String uid = InitApp.sUser.getUid();
+                        DatabaseReference mData = mDatabase.child("users").child(uid).child("img");
+
+
+                        mData.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                int selected = 0;
+                                //
+                                if (dataSnapshot.getValue(Integer.class) == null) {
+                                    selected = 0;
+
+                                }
+                                selected = dataSnapshot.getValue(Integer.class);
+                                //selectF = selected;
+                                profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.w("Failed to read value.", databaseError.toException());
+                            }
+                        });
+
+                        // profileImg.setImageResource(R.drawable.profile_0);
+
+                        //사용자 ID 받기
+//                    userID = userEmail.getText().toString().replaceAll("@gmail.com", "");
+                    }
+                }catch(NullPointerException e){
+                    e.printStackTrace();
                 }
             }
+
         };
 
         // ((InitApp)getApplication()).initDatabase();
@@ -279,6 +293,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.navi_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -296,6 +311,7 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -329,11 +345,40 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else{
+        } else {
             super.onBackPressed();
+        }
+    }
+
+
+    //권한설정
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for (int i = 0; i < cnt; i++) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+
+                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
         }
     }
 
