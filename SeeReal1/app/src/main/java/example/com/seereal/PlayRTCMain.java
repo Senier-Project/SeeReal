@@ -57,22 +57,15 @@ public class PlayRTCMain extends AppCompatActivity {
     private PlayRTCMedia remoteMedia;
     private String channelId;
 
+
+   // public static boolean isReceived = false;
     private RelativeLayout videoViewGroup;
 
-    //권한설정용
-    public static final String[] MANDATORY_PERMISSIONS = {
-            "android.permission.INTERNET",
-            "android.permission.CAMERA",
-            "android.permission.RECORD_AUDIO",
-            "android.permission.MODIFY_AUDIO_SETTINGS",
-            "android.permission.ACCESS_NETWORK_STATE",
-            "android.permission.CHANGE_WIFI_STATE",
-            "android.permission.ACCESS_WIFI_STATE",
-            "android.permission.READ_PHONE_STATE",
-            "android.permission.BLUETOOTH",
-            "android.permission.BLUETOOTH_ADMIN",
-            "android.permission.WRITE_EXTERNAL_STORAGE"
-    };
+    private String pushToken;
+    private String name;
+
+
+
 
     private String ChannelId;
 
@@ -87,16 +80,20 @@ public class PlayRTCMain extends AppCompatActivity {
         ChannelId = bundle.getString("channelId");
        // Log.d("PlayRTC",ChannelId);
 
+<<<<<<< HEAD
         //권한설정
         if (android.os.Build.VERSION.SDK_INT >= 23)
         {
             checkPermission(MANDATORY_PERMISSIONS);
         }
         //
+=======
+>>>>>>> bumjun
 
         createPlayRTCObserverInstance();
 
         createPlayRTCInstance();
+<<<<<<< HEAD
 
         setToolbar();
       //  setFragmentNavigationDrawer();
@@ -131,6 +128,15 @@ public class PlayRTCMain extends AppCompatActivity {
                 break;
         }
     }
+=======
+        if (ReceivedSingleton.getInstance().instanceOf(true))
+            createChannel();
+        else
+            connectChannel(receivedId);
+
+    }
+
+>>>>>>> bumjun
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
@@ -213,6 +219,10 @@ public class PlayRTCMain extends AppCompatActivity {
             public void onDisconnectChannel(final PlayRTC obj, final String disconnectReason) {
                 super.onDisconnectChannel(obj,disconnectReason);
                 isChannelConnected = false;
+<<<<<<< HEAD
+=======
+                ReceivedSingleton.getInstance().reset();
+>>>>>>> bumjun
 
                 // v2.2.5
                 localView.bgClearColor();
@@ -490,6 +500,13 @@ public class PlayRTCMain extends AppCompatActivity {
         closeAlertDialog = alertDialogBuilder.create();
     }
 
+<<<<<<< HEAD
+=======
+    private void createChannel() {
+        try {
+            playrtc.createChannel(new JSONObject());
+            ReceivedSingleton.getInstance().reset();
+>>>>>>> bumjun
 
 
 

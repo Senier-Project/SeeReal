@@ -1,6 +1,8 @@
 package example.com.seereal;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -58,7 +60,21 @@ public class MainActivity extends AppCompatActivity
     public static int width;
     public static int height;
 
-    public static String userID;
+
+    //권한설정용
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.CAMERA",
+            "android.permission.RECORD_AUDIO",
+            "android.permission.MODIFY_AUDIO_SETTINGS",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.BLUETOOTH",
+            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+    };
 
 
     @Override
@@ -77,6 +93,16 @@ public class MainActivity extends AppCompatActivity
         InitApp.sAuth.addAuthStateListener(mListener);
         Log.d("susu","uid"+uid);
 
+<<<<<<< HEAD
+=======
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w( "Failed to read value.", databaseError.toException());
+            }
+        });*/
+
+
+>>>>>>> bumjun
     }
     //  TextView tv;
     @Override
@@ -147,6 +173,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+<<<<<<< HEAD
         /*
         //FirebaseStorage
 
@@ -182,6 +209,13 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 */
+=======
+        //권한설정
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
+        //
+>>>>>>> bumjun
 
     }
 
@@ -334,6 +368,36 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             super.onBackPressed();
+        }
+    }
+
+
+    //권한설정
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for (int i = 0; i < cnt; i++) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+
+                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
         }
     }
 
