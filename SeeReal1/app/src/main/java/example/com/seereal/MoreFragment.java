@@ -61,6 +61,7 @@ public class MoreFragment extends Fragment {
 
                 }
                 selected = dataSnapshot.getValue(Integer.class);
+
                 //selectF = selected;
                 profileImg.setImageResource(Utils.getProfileImgDrawable(selected));
             }

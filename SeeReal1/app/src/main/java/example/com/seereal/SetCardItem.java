@@ -1,17 +1,15 @@
 package example.com.seereal;
 
-import java.util.ArrayList;
-
 public class SetCardItem {
 
     private String title;
     private String tag;
-    private int image;
+    private String image;
     private int isLike;
     private CardViewItem item = new CardViewItem();
 
 
-    public SetCardItem(String title, String tag, int image, int isLike) {
+    public SetCardItem(String title, String tag, String image, int isLike) {
 
         this.title = title;
         this.tag = tag;

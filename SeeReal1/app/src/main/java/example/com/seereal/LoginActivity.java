@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 // 인증된 유저가 존재할 경우 바로 Main액티비티로 넘긴 후 SignIn액티비티는 종료.
                 if (InitApp.sUser != null) {
                     toast.setText(InitApp.sUser.getDisplayName() + "님 환영합니다.");
+
                     toast.show();
 
                     passPushTokenToServer();

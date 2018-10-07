@@ -1,8 +1,9 @@
 package example.com.seereal;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,21 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
         imageView.getLayoutParams().height = height / 5;
         imageView.getLayoutParams().width = width / 3;
         imageView.requestLayout();
-        imageView.setImageResource(item.getImage());
+
+        Log.d("susu", "55  "+item.getImage());
+
+      //  if(item.getImage() != null)
+        //getResources(), R.drawable.test02);
+        Bitmap bitmapImage;
+        while(true){
+            bitmapImage = BitmapFactory.decodeFile(item.getImage());
+            if(bitmapImage != null) break;
+        }
+        //Bitmap bitmapImage = BitmapFactory.decodeFile(item.getImage());
+        // testStorage.setImageBitmap(bitmapImage);
+
+        imageView.setImageBitmap(bitmapImage);
+        //imageView.setImageResource(R.drawable.car_battery);//.setImageBitmap(bitmapImage);
         isLike.setImageResource(item.getIsLike());
         titleView.setText(item.getTitle());
         tagView.setText(item.getTag());
@@ -74,6 +89,7 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
             public void onClick(View v) {
                 i = 1 - i;
                 if (i == 0) {
+                    Log.d("susu", "6  ");
                     isLike.setImageResource(R.drawable.baseline_favorite_border_black_18dp);
                 } else {
                     isLike.setImageResource(R.drawable.baseline_favorite_black_18dp);

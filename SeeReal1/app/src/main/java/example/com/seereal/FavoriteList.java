@@ -1,6 +1,5 @@
 package example.com.seereal;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,7 +53,8 @@ public class FavoriteList extends Fragment {
     public ArrayList<CardViewItem> getData()
     {
         ArrayList<CardViewItem> list = new ArrayList<>();
-
+        //TODO : firebase Storage
+/*
         CardViewItem item = new CardViewItem();
         item.setTitle("타이어 지렁이 수리");
         item.setTag("#타이어#나갔음#지렁이#수리#짱");
@@ -70,7 +70,7 @@ public class FavoriteList extends Fragment {
         list.add(item);
 
 
-
+*/
         return list;
     }
 }

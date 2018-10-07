@@ -49,7 +49,7 @@
             </intent-filter>
         </service>
 
-
+        <activity android:name=".ItemViewActivity"></activity>
     </application>
 
 </manifest>

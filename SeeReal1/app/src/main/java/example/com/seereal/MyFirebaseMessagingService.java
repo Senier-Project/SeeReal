@@ -33,8 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             // 이거 추가 하면
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE );
-            PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK
-                    | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
+            PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
             wakeLock.acquire(3000);
 
 
