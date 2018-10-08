@@ -1,6 +1,8 @@
 package example.com.seereal;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -48,16 +50,31 @@ public class MainActivity extends AppCompatActivity
 
     TextView userName, userEmail;
     ImageView profileImg;
+
     private FirebaseAuth.AuthStateListener mListener;
 
-    TextView testText;
+
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     public static int width;
     public static int height;
 
-    public static String userID;
+
+    //권한설정용
+    public static final String[] MANDATORY_PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.CAMERA",
+            "android.permission.RECORD_AUDIO",
+            "android.permission.MODIFY_AUDIO_SETTINGS",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.BLUETOOTH",
+            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+    };
 
 
     @Override
@@ -88,6 +105,8 @@ public class MainActivity extends AppCompatActivity
                 Log.w( "Failed to read value.", databaseError.toException());
             }
         });*/
+
+
     }
 
     //  TextView tv;
@@ -97,9 +116,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Log.d("susu", "onCreate");
 
+
         setFirebase();
 
-        testText = (TextView) findViewById(R.id.testText);
+        //testStorage = (ImageView) findViewById(R.id.testStorage);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -158,6 +178,47 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        //권한설정
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            checkPermission(MANDATORY_PERMISSIONS);
+        }
+        //
+        /*
+        //FirebaseStorage
+
+        String folderName = "vehicle";
+        String imageName = "susu.jpg";
+
+        // Storage 이미지 다운로드 경로
+        String storagePath = folderName + "/" + imageName;
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        StorageReference imageRef = mStorageRef.child(storagePath);
+
+        try {
+            // Storage 에서 다운받아 저장시킬 임시파일
+            final File imageFile = File.createTempFile("images", "jpg");
+            imageRef.getFile(imageFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Success Case
+                    Bitmap bitmapImage = BitmapFactory.decodeFile(imageFile.getPath());
+                    testStorage.setImageBitmap(bitmapImage);
+                    Toast.makeText(getApplicationContext(), "Success !!", Toast.LENGTH_LONG).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Fail Case
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Fail !!", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
 
     }
 
@@ -255,6 +316,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 }catch(NullPointerException e){
                     e.printStackTrace();
+
                 }
             }
 
@@ -325,6 +387,36 @@ public class MainActivity extends AppCompatActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+
+    //권한설정
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+
+    @SuppressLint("NewApi")
+    private void checkPermission(String[] permissions) {
+
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for (int i = 0; i < cnt; i++) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+
+                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
+                    }
+                }
+                break;
         }
     }
 

@@ -5,6 +5,7 @@ public class FriendData {
     private  String email;
     private int img;
     private String token;
+
    // private String age;
 
     public FriendData(String name)//, String age) {
@@ -48,7 +49,6 @@ public class FriendData {
     public int getImg() { return img; }
     public void setImage(int img) {  this.img = img; }
     public String getToken() {return this.token;}
-
 
 
 }

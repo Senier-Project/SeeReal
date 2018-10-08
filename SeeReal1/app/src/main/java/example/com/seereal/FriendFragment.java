@@ -45,7 +45,6 @@ public class FriendFragment extends Fragment {
 
     private Context mContext;
 
-
     public static FriendFragment newInstance() {
         FriendFragment friendFragment = new FriendFragment();
         return friendFragment;
@@ -108,12 +107,14 @@ public class FriendFragment extends Fragment {
                         String Fname = snapshot.child("name").getValue(String.class);
                         String Femail = snapshot.child("email").getValue(String.class);
                         String Ftoken = snapshot.child("pushToken").getValue(String.class);
+
                         Log.d("susu","SS!! name"+Fname+"  / Femail"+Femail);
                         Integer Fimg = snapshot.child("img").getValue(Integer.class);
                        if(Fimg == null)
                            Fimg = 0;
                         //int Fimg= 2;
                         friendData = new FriendData(Fname, Femail, Fimg,Ftoken);
+
 
                         items.add(friendData);
                     }
@@ -145,6 +146,7 @@ public class FriendFragment extends Fragment {
             holder.emailText.setText(friendData.getEmail());
             holder.img.setImageResource(Utils.getProfileImgDrawable(friendData.getImg()));
             holder.pushToken=friendData.getToken();
+
         }
 
         @Override

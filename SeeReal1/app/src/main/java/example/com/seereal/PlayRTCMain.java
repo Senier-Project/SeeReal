@@ -64,27 +64,14 @@ public class PlayRTCMain extends AppCompatActivity {
     private String channelId;
     private String receivedId;
 
-    public static boolean isReceived = false;
+   // public static boolean isReceived = false;
     private RelativeLayout videoViewGroup;
 
     private String pushToken;
     private String name;
 
 
-    //권한설정용
-    public static final String[] MANDATORY_PERMISSIONS = {
-            "android.permission.INTERNET",
-            "android.permission.CAMERA",
-            "android.permission.RECORD_AUDIO",
-            "android.permission.MODIFY_AUDIO_SETTINGS",
-            "android.permission.ACCESS_NETWORK_STATE",
-            "android.permission.CHANGE_WIFI_STATE",
-            "android.permission.ACCESS_WIFI_STATE",
-            "android.permission.READ_PHONE_STATE",
-            "android.permission.BLUETOOTH",
-            "android.permission.BLUETOOTH_ADMIN",
-            "android.permission.WRITE_EXTERNAL_STORAGE"
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,11 +88,6 @@ public class PlayRTCMain extends AppCompatActivity {
         receivedId = bundle.getString("id");
         Log.d("JJ", "받은 채널 " + receivedId);
 
-        //권한설정
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            checkPermission(MANDATORY_PERMISSIONS);
-        }
-        //
 
         destinationUserModel = new UserModel();
         destinationUserModel.pushToken = pushToken;
@@ -113,41 +95,13 @@ public class PlayRTCMain extends AppCompatActivity {
 
         createPlayRTCObserverInstance();
         createPlayRTCInstance();
-        if (!isReceived)
+        if (ReceivedSingleton.getInstance().instanceOf(false))
             createChannel();
         else
             connectChannel(receivedId);
 
     }
 
-    //권한설정
-    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
-
-    @SuppressLint("NewApi")
-    private void checkPermission(String[] permissions) {
-
-        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_STORAGE:
-                int cnt = permissions.length;
-                for (int i = 0; i < cnt; i++) {
-
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-
-                        // Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
-
-                    } else {
-
-                        // Log.i(LOG_TAG, "permission[" + permissions[i] + "] always deny");
-                    }
-                }
-                break;
-        }
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -180,7 +134,7 @@ public class PlayRTCMain extends AppCompatActivity {
         }
 
         playrtcObserver = null;
-        android.os.Process.killProcess(android.os.Process.myPid());
+      //  android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
@@ -217,10 +171,15 @@ public class PlayRTCMain extends AppCompatActivity {
                 localMedia = playRTCMedia;
 
                 long delayTime = 0;
+                if (ReceivedSingleton.getInstance().instanceOf(true)) {
+                    localView.show(delayTime);
+                    // Link the media stream to the view.
+                    playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                } else {
+                    remoteView.show(delayTime);
 
-                localView.show(delayTime);
-                // Link the media stream to the view.
-                playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                    playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                }
             }
 
             @Override
@@ -230,17 +189,24 @@ public class PlayRTCMain extends AppCompatActivity {
 
                 long delayTime = 0;
 
-                remoteView.show(delayTime);
-                // Link the media stream to the view.
-                playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                if (ReceivedSingleton.getInstance().instanceOf(true)) {
 
+                    remoteView.show(delayTime);
+                    // Link the media stream to the view.
+                    playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                }
+                else {
+                    localView.show(delayTime);
+
+                    playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                }
             }
 
             @Override
             public void onDisconnectChannel(final PlayRTC obj, final String disconnectReason) {
                 super.onDisconnectChannel(obj, disconnectReason);
                 isChannelConnected = false;
-                isReceived = false;
+                ReceivedSingleton.getInstance().reset();
 
                 // v2.2.5
                 localView.bgClearColor();
@@ -287,7 +253,7 @@ public class PlayRTCMain extends AppCompatActivity {
          * - Front
          * - Back
          */
-        config.video.setCameraType(PlayRTCVideoConfig.CameraType.Front);
+        config.video.setCameraType(PlayRTCVideoConfig.CameraType.Back);
 
         /*
          * enum VideoCodec
@@ -450,7 +416,7 @@ public class PlayRTCMain extends AppCompatActivity {
     private void createChannel() {
         try {
             playrtc.createChannel(new JSONObject());
-            isReceived = false;
+            ReceivedSingleton.getInstance().reset();
 
         } catch (RequiredConfigMissingException e) {
             e.printStackTrace();

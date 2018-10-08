@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,6 +21,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import static android.support.constraint.Constraints.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -31,8 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             // 이거 추가 하면
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE );
-            PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK
-                    | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
+            PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
             wakeLock.acquire(3000);
 
 
@@ -46,7 +47,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String title, String text) {
-        PlayRTCMain.isReceived=true;
+        ReceivedSingleton.getInstance().onReceived();
+        //PlayRTCMain.isReceived=true;
         Bundle bundle =new Bundle();
         bundle.putString("id",text);
         Intent intent = new Intent(this, PlayRTCMain.class);

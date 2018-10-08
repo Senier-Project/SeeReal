@@ -1,15 +1,15 @@
 package example.com.seereal;
 
 public class CardViewItem {
-    int image;
+    String image;
     int isLike;
     String title, tag;
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
