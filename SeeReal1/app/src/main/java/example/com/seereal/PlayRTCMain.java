@@ -95,7 +95,7 @@ public class PlayRTCMain extends AppCompatActivity {
 
         createPlayRTCObserverInstance();
         createPlayRTCInstance();
-        if (ReceivedSingleton.getInstance().instanceOf(true))
+        if (ReceivedSingleton.getInstance().instanceOf(false))
             createChannel();
         else
             connectChannel(receivedId);
@@ -134,7 +134,7 @@ public class PlayRTCMain extends AppCompatActivity {
         }
 
         playrtcObserver = null;
-        android.os.Process.killProcess(android.os.Process.myPid());
+      //  android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
@@ -171,10 +171,15 @@ public class PlayRTCMain extends AppCompatActivity {
                 localMedia = playRTCMedia;
 
                 long delayTime = 0;
+                if (ReceivedSingleton.getInstance().instanceOf(true)) {
+                    localView.show(delayTime);
+                    // Link the media stream to the view.
+                    playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                } else {
+                    remoteView.show(delayTime);
 
-                localView.show(delayTime);
-                // Link the media stream to the view.
-                playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                    playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                }
             }
 
             @Override
@@ -184,10 +189,17 @@ public class PlayRTCMain extends AppCompatActivity {
 
                 long delayTime = 0;
 
-                remoteView.show(delayTime);
-                // Link the media stream to the view.
-                playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                if (ReceivedSingleton.getInstance().instanceOf(true)) {
 
+                    remoteView.show(delayTime);
+                    // Link the media stream to the view.
+                    playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
+                }
+                else {
+                    localView.show(delayTime);
+
+                    playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
+                }
             }
 
             @Override
@@ -241,7 +253,7 @@ public class PlayRTCMain extends AppCompatActivity {
          * - Front
          * - Back
          */
-        config.video.setCameraType(PlayRTCVideoConfig.CameraType.Front);
+        config.video.setCameraType(PlayRTCVideoConfig.CameraType.Back);
 
         /*
          * enum VideoCodec
