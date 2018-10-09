@@ -5,13 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -46,6 +54,7 @@ import okhttp3.Response;
 
 public class PlayRTCMain extends AppCompatActivity {
 
+    private DrawerLayout mDrawerLayout;
     private Context mContext;
     private String MY_PROJECT_ID = "60ba608a-e228-4530-8711-fa38004719c1";
 
@@ -64,20 +73,20 @@ public class PlayRTCMain extends AppCompatActivity {
     private String channelId;
     private String receivedId;
 
-   // public static boolean isReceived = false;
+    // public static boolean isReceived = false;
     private RelativeLayout videoViewGroup;
 
     private String pushToken;
     private String name;
 
-
-
+    SetButton button;
+    private boolean status = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.video_call_main);
         Log.d("PlayRTC", "RTC Main 실행");
 
@@ -100,6 +109,39 @@ public class PlayRTCMain extends AppCompatActivity {
         else
             connectChannel(receivedId);
 
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                mDrawerLayout.closeDrawers();
+
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.item1:
+                        Log.d("susu", "item1");
+                        break;
+                    case R.id.item2:
+                        Log.d("susu", "item2");
+                        break;
+                    case R.id.item3:
+                        Log.d("susu", "item3");
+                        break;
+
+                }
+                return true;
+            }
+        });
+
+        button = new SetButton();
     }
 
 
@@ -134,7 +176,7 @@ public class PlayRTCMain extends AppCompatActivity {
         }
 
         playrtcObserver = null;
-      //  android.os.Process.killProcess(android.os.Process.myPid());
+        //  android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
@@ -194,8 +236,7 @@ public class PlayRTCMain extends AppCompatActivity {
                     remoteView.show(delayTime);
                     // Link the media stream to the view.
                     playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
-                }
-                else {
+                } else {
                     localView.show(delayTime);
 
                     playRTCMedia.setVideoRenderer(localView.getVideoRenderer());
@@ -214,7 +255,7 @@ public class PlayRTCMain extends AppCompatActivity {
 
                 // Create PlayRTCMain instance again.
                 // Because at the disconnect moment, the PlayRTCMain instance has removed.
-                 createPlayRTCInstance();
+                createPlayRTCInstance();
             }
 
 //            @Override
@@ -330,6 +371,41 @@ public class PlayRTCMain extends AppCompatActivity {
             param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             param.setMargins(30, 30, 30, 30);
+
+            final DrawOnTop mDraw = new DrawOnTop(getApplicationContext());
+            Preview mPreview = new Preview(getApplicationContext(), myVideoSize.x, myVideoSize.y);
+
+
+           Button btn_undo= button.create(getApplicationContext(),"Undo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.ALIGN_PARENT_BOTTOM);
+           Button btn_redo= button.create(getApplicationContext(),"Redo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_LEFT,RelativeLayout.ALIGN_PARENT_BOTTOM);
+           btn_undo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    status=true;
+                    if(status==true){
+                        mDraw.onClickUndo();
+                        status=false;
+                    }
+                }
+            });
+
+
+            btn_redo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    status=true;
+                    if(status==true){
+                        mDraw.onClickRedo();
+                        status=false;
+                    }
+                }
+            });
+
+            parentVideoViewGroup.addView(btn_redo);
+            parentVideoViewGroup.addView(btn_undo);
+            parentVideoViewGroup.addView(mPreview);
+            parentVideoViewGroup.addView(mDraw);
+
 
             // Create the localViews.
             // new v2.2.6
