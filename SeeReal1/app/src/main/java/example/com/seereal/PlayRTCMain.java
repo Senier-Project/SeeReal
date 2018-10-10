@@ -5,13 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -70,8 +74,12 @@ public class PlayRTCMain extends AppCompatActivity {
     private String pushToken;
     private String name;
 
+    private RelativeLayout toolBoxLayout;
 
-
+    private ImageButton mClickObject;
+    private ImageButton mRotateObject;
+    private ImageButton mProhibitObject;
+    private ImageButton mCheckObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +188,22 @@ public class PlayRTCMain extends AppCompatActivity {
 
                     playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
                 }
+                toolBoxLayout = (RelativeLayout) View.inflate(getApplicationContext(), R.layout.ar_toolbox, null);
+
+                toolBoxLayout.setVisibility(View.VISIBLE);
+                toolBoxLayout.setBackgroundColor(Color.TRANSPARENT);
+
+                addContentView(toolBoxLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+                mClickObject = toolBoxLayout.findViewById(R.id.ar_click_button);
+                mRotateObject=toolBoxLayout.findViewById(R.id.ar_rotate_button);
+                mProhibitObject=toolBoxLayout.findViewById(R.id.ar_prohibit_button);
+                mCheckObject=toolBoxLayout.findViewById(R.id.ar_check_button);
+
+                toolBoxLayout.bringToFront();
+
             }
 
             @Override

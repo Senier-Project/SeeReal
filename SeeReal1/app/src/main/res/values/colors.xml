@@ -13,7 +13,9 @@
     <color name="rtc_secondary_text">@color/md_grey_600</color>
     <color name="rtc_icons">@color/md_white_1000</color>
     <color name="rtc_divider">@color/md_grey_400</color>
-
+    <color name="light_gray">#D3D3D3</color>
+    <color name="semi_transparent_black">#C8000000</color>
+    <color name="transparent">#00000000</color>
     <!-- google's material design colours from
     http://www.google.com/design/spec/style/color.html#color-ui-color-palette
     https://gist.github.com/daniellevass/b0b8cfa773488e138037-->
