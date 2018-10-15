@@ -1,6 +1,7 @@
 package example.com.seereal;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,11 +17,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -246,7 +250,78 @@ public class PlayRTCMain extends AppCompatActivity {
                 mCheckObject=toolBoxLayout.findViewById(R.id.ar_check_button);
 
                 toolBoxLayout.bringToFront();
+
+                mClickObject.setOnTouchListener(mTouchListener);
+                mRotateObject.setOnTouchListener(mTouchListener);
+                mProhibitObject.setOnTouchListener(mTouchListener);
+                mCheckObject.setOnTouchListener(mTouchListener);
+                RelativeLayout myVideoViewGroup=(RelativeLayout) findViewById(R.id.video_view_group);
+
+                myVideoViewGroup.setOnDragListener(mDragListener);
             }
+            View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction()==MotionEvent.ACTION_DOWN) {
+                        ClipData clip = ClipData.newPlainText("","");
+                        view.startDrag(clip,new CanvasShadow(view, (int)motionEvent.getX(),(int)motionEvent.getY()),view,0);
+                        //   view.setVisibility(View.INVISIBLE);
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            View.OnDragListener mDragListener = new View.OnDragListener() {
+                @Override
+                public boolean onDrag(View v, DragEvent dragEvent) {
+                    switch(dragEvent.getAction()) {
+
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            Log.d("bbumjun",String.valueOf(dragEvent.getX())+' '+String.valueOf(dragEvent.getY()));
+
+
+                            return true;
+
+
+                        case DragEvent.ACTION_DRAG_ENTERED:
+
+
+                            return true;
+
+
+                        case DragEvent.ACTION_DRAG_EXITED:
+
+
+                            return true;
+
+
+                        case DragEvent.ACTION_DROP:
+                            View view = (View)dragEvent.getLocalState();
+                            ViewGroup parent =(ViewGroup)view.getParent();
+                            RelativeLayout myVideoViewGroup=(RelativeLayout) findViewById(R.id.video_view_group);
+                            myVideoViewGroup.addView(view);
+                              view.setLeft((int)dragEvent.getX());
+                               view.setTop((int)dragEvent.getY());
+                            parent.removeView(view);
+                            view.setVisibility(View.VISIBLE);
+                            Log.d("bbumjun1",String.valueOf(dragEvent.getX())+' '+String.valueOf(dragEvent.getY()));
+                            return true;
+
+                        case DragEvent.ACTION_DRAG_ENDED:
+
+
+                        //    if (dragEvent.getResult() == false) {//드래그 종료시 처음 숨겼던 뷰를 다시 보이도록 한다.
+
+
+                                ((View) (dragEvent.getLocalState())).setVisibility(View.VISIBLE);
+
+
+                       //     }
+                            return true;
+                    }
+                    return false;
+                }
+            };
 
             @Override
             public void onAddRemoteStream(final PlayRTC obj, final String peerId, final String peerUserId, final PlayRTCMedia playRTCMedia) {
