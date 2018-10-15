@@ -18,8 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -79,7 +81,13 @@ public class PlayRTCMain extends AppCompatActivity {
     private String pushToken;
     private String name;
 
-    SetButton button;
+    private RelativeLayout toolBoxLayout;
+    private ImageButton mClickObject;
+    private ImageButton mRotateObject;
+    private ImageButton mProhibitObject;
+    private ImageButton mCheckObject;
+
+    Utils setButton;
     private boolean status = false;
 
     @Override
@@ -141,7 +149,7 @@ public class PlayRTCMain extends AppCompatActivity {
             }
         });
 
-        button = new SetButton();
+        setButton = new Utils();
     }
 
 
@@ -222,6 +230,22 @@ public class PlayRTCMain extends AppCompatActivity {
 
                     playRTCMedia.setVideoRenderer(remoteView.getVideoRenderer());
                 }
+
+                toolBoxLayout = (RelativeLayout) View.inflate(getApplicationContext(), R.layout.ar_toolbox, null);
+
+                toolBoxLayout.setVisibility(View.VISIBLE);
+                toolBoxLayout.setBackgroundColor(Color.TRANSPARENT);
+
+                addContentView(toolBoxLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+                mClickObject = toolBoxLayout.findViewById(R.id.ar_click_button);
+                mRotateObject=toolBoxLayout.findViewById(R.id.ar_rotate_button);
+                mProhibitObject=toolBoxLayout.findViewById(R.id.ar_prohibit_button);
+                mCheckObject=toolBoxLayout.findViewById(R.id.ar_check_button);
+
+                toolBoxLayout.bringToFront();
             }
 
             @Override
@@ -376,8 +400,8 @@ public class PlayRTCMain extends AppCompatActivity {
             Preview mPreview = new Preview(getApplicationContext(), myVideoSize.x, myVideoSize.y);
 
 
-           Button btn_undo= button.create(getApplicationContext(),"Undo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.ALIGN_PARENT_BOTTOM);
-           Button btn_redo= button.create(getApplicationContext(),"Redo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_LEFT,RelativeLayout.ALIGN_PARENT_BOTTOM);
+           Button btn_undo= setButton.create(getApplicationContext(),"Undo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.ALIGN_PARENT_BOTTOM);
+           Button btn_redo= setButton.create(getApplicationContext(),"Redo",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_LEFT,RelativeLayout.ALIGN_PARENT_BOTTOM);
            btn_undo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
