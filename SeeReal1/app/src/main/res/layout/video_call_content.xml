@@ -13,15 +13,12 @@
         android:layout_height="match_parent"
         tools:context="example.com.seereal.PlayRTCMain">
 
-        <include
-            android:id="@+id/app_bar"
-            layout="@layout/toolbar_video_call" />
+
 
         <RelativeLayout
             android:id="@+id/video_view_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/app_bar"
             android:layout_centerHorizontal="true">
 
             <!-- TODO: PlayRTCVideView XML View need update SDK -->
@@ -40,14 +37,6 @@
 
         </RelativeLayout>
 
-       <!--<Button-->
-            <!--android:id="@+id/btn_erase"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:background="#00FF0000"-->
-            <!--android:text="지우기"/>-->
     </RelativeLayout>
 
 

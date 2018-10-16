@@ -95,7 +95,7 @@ public class PlayRTCMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.video_call_main);
+        setContentView(R.layout.video_call_content);
         Log.d("PlayRTC", "RTC Main 실행");
 
         Intent intent = getIntent();
@@ -117,37 +117,6 @@ public class PlayRTCMain extends AppCompatActivity {
         else
             connectChannel(receivedId);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(true);
-                mDrawerLayout.closeDrawers();
-
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.item1:
-                        Log.d("susu", "item1");
-                        break;
-                    case R.id.item2:
-                        Log.d("susu", "item2");
-                        break;
-                    case R.id.item3:
-                        Log.d("susu", "item3");
-                        break;
-
-                }
-                return true;
-            }
-        });
 
         setButton = new Utils();
     }
