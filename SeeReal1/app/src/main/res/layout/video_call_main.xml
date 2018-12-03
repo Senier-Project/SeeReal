@@ -6,16 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
+   <!-- <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark" >
-
-
     </android.support.v7.widget.Toolbar>
-    <android.support.v4.widget.DrawerLayout
+-->
+
+   <!-- <android.support.v4.widget.DrawerLayout
         android:id="@+id/dl_main_drawer_root"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,15 +26,13 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start"
         >
+        -->
 
         <!-- main content -->
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/video_call_content" />
+
 
         <!-- navigation drawer-->
-        <android.support.design.widget.NavigationView
+        <!--<android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -42,6 +40,9 @@
             app:menu="@menu/drawer_video_call"
             android:layout_gravity="start"/>
 
-    </android.support.v4.widget.DrawerLayout>
-
+    </android.support.v4.widget.DrawerLayout>-->
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/video_call_content" />
 </android.support.constraint.ConstraintLayout>

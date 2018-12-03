@@ -39,18 +39,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             String title =remoteMessage.getData().get("title").toString();
             String text = remoteMessage.getData().get("text").toString();
-            sendNotification(title,text);
+            String senderIP=remoteMessage.getData().get("ip").toString();
+            sendNotification(title,text,senderIP);
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void sendNotification(String title, String text) {
+    private void sendNotification(String title, String text,String ip) {
         ReceivedSingleton.getInstance().onReceived();
         //PlayRTCMain.isReceived=true;
         Bundle bundle =new Bundle();
         bundle.putString("id",text);
+        bundle.putString("ip",ip);
         Intent intent = new Intent(this, PlayRTCMain.class);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

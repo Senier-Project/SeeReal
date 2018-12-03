@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -20,6 +21,8 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     private Paint       mPaint;
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
+
+    private Path re_mPath;
 
 
     public DrawOnTop(Context context)
@@ -43,6 +46,8 @@ public class DrawOnTop extends View implements View.OnTouchListener{
 
     }
 
+
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -60,6 +65,7 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     private static final float TOUCH_TOLERANCE = 4;
 
     private void touch_start(float x, float y) {
+        Log.d("jj","touch start 시작");
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
@@ -76,6 +82,7 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     }
 
     private void touch_up() {
+        Log.d("jj","touch up 시작");
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen
         mCanvas.drawPath(mPath, mPaint);
@@ -130,6 +137,16 @@ public class DrawOnTop extends View implements View.OnTouchListener{
                 break;
         }
         return true;
+    }
+
+    public ArrayList<Path> getPaths () {
+
+        return paths;
+    }
+
+    public void setPaths(ArrayList<Path> paths)  {
+        this.paths=paths;
+        invalidate();
     }
 
 }
