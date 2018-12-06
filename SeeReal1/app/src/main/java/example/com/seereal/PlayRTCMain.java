@@ -105,7 +105,9 @@ public class PlayRTCMain extends AppCompatActivity {
     private int PORT = 10001;
     private int PORT2 =10002;
     private String helpee_temp,helper_temp;
-
+    private boolean colorChanged= false;
+    private int color;
+    private int changedColor;
     String helperMsg = "";
     boolean helperIsConnected = true;
 
@@ -547,38 +549,40 @@ public class PlayRTCMain extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    switch (view.getId()) {
-                        case R.id.btn_red:
-                            Log.d("jj", "red btn click");
-                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#B71C1C"));
-                            parentVideoViewGroup.addView(mDraw);
-                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                            break;
-                        case R.id.btn_yellow:
-                            Log.d("jj", "yellow btn click");
-                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#FFEB3B"));
-                            parentVideoViewGroup.addView(mDraw);
-                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                            break;
-                        case R.id.btn_green:
-                            Log.d("jj", "green btn click");
-                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#388E3C"));
-                            parentVideoViewGroup.addView(mDraw);
-                           // mDraw.setColor(Color.parseColor("#388E3C"));
-                            break;
-                        case R.id.btn_blue:
-                            Log.d("jj", "blue btn click");
-                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#1E88E5"));
-                            parentVideoViewGroup.addView(mDraw);
-                            //mDraw.setColor(Color.parseColor("#1E88E5"));
-                            break;
-                        case R.id.btn_black:
-                            Log.d("jj", "black btn click");
-                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#000000"));
-                            parentVideoViewGroup.addView(mDraw);
-                            //mDraw.setColor(Color.parseColor("#000000"));
-                            break;
-                    }
+                  colorChanged=true;
+                  color=view.getId();
+                         switch (view.getId()) {
+                            case R.id.btn_red:
+                                Log.d("jj", "red btn click");
+                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
+                                parentVideoViewGroup.addView(mDraw);
+                                //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                break;
+                            case R.id.btn_yellow:
+                                Log.d("jj", "yellow btn click");
+                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
+                                parentVideoViewGroup.addView(mDraw);
+                                //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                break;
+                            case R.id.btn_green:
+                                Log.d("jj", "green btn click");
+                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
+                                parentVideoViewGroup.addView(mDraw);
+                                // mDraw.setColor(Color.parseColor("#388E3C"));
+                                break;
+                            case R.id.btn_blue:
+                                Log.d("jj", "blue btn click");
+                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
+                                parentVideoViewGroup.addView(mDraw);
+                                //mDraw.setColor(Color.parseColor("#1E88E5"));
+                                break;
+                            case R.id.btn_black:
+                                Log.d("jj", "black btn click");
+                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
+                                parentVideoViewGroup.addView(mDraw);
+                                //mDraw.setColor(Color.parseColor("#000000"));
+                                break;
+                        }
 
                 }
             };
@@ -634,9 +638,9 @@ public class PlayRTCMain extends AppCompatActivity {
                 public void onClick(View view) {
 
                     //  String sendText = InitApp.sUser.getDisplayName() + " :  " + sendMs.getText().toString();
-                    printMs.append("Me  : "+sendMs.getText().toString() + "\n");
+                    printMs.append("나 : "+sendMs.getText().toString() + "\n");
+                    sendMs.clearFocus();
 
-                    sendMs.setText("");
                     if (os == null) return; //클라이언트와 연결되어 있지 않다면 전송불가..
 
                     //네트워크 작업이므로 Thread 생성
@@ -647,7 +651,6 @@ public class PlayRTCMain extends AppCompatActivity {
                             // TODO Auto-generated method stub
                             //클라이언트로 보낼 메세지 EditText로 부터 얻어오기
                             String msg = sendMs.getText().toString();
-                            sendMs.setText("");
 
                             try {
                                 os.writeUTF("<text> "+msg); //클라이언트로 메세지 보내기.UTF 방식으로(한글 전송가능...)
@@ -809,6 +812,10 @@ public class PlayRTCMain extends AppCompatActivity {
                             }
 
                         }
+                        else if(helpee_temp.startsWith("<color>")) {
+                             changedColor = Integer.parseInt(is.readUTF());
+                            Log.d("bbumjun","color value="+changedColor);
+                        }
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         //       e.printStackTrace();
@@ -825,11 +832,45 @@ public class PlayRTCMain extends AppCompatActivity {
                             // TOO ADuto-generated method stub
                             if(helpee_temp.startsWith("<text>")) {
 
-                                printMs.append("You" + "  " + helpeeMsg + "\n");
+                                printMs.append("상대방 : " + helpeeMsg + "\n");
                             } else if(helpee_temp.startsWith("<draw>")) {
-                                mDraw.draw2(x,y);
-
+                                mDraw.draw2(x, y);
                             }
+                                else if (helpee_temp.startsWith("<color>")) {
+                                    switch (changedColor) {
+                                        case R.id.btn_red:
+                                            Log.d("jj", "red btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                            break;
+                                        case R.id.btn_yellow:
+                                            Log.d("jj", "yellow btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                            break;
+                                        case R.id.btn_green:
+                                            Log.d("jj", "green btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            // mDraw.setColor(Color.parseColor("#388E3C"));
+                                            break;
+                                        case R.id.btn_blue:
+                                            Log.d("jj", "blue btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#1E88E5"));
+                                            break;
+                                        case R.id.btn_black:
+                                            Log.d("jj", "black btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#000000"));
+                                            break;
+                                    }
+                                }
+
                         }
                     });
                     /////////////////////////////////////////////////////////////////////////////
@@ -845,9 +886,17 @@ public class PlayRTCMain extends AppCompatActivity {
                         if (mDraw.drawing == false) {
                             Log.d("bbumjun","헬피에서 좌표 보냄");
                             os.writeUTF("<draw>");
+                            os.flush();
                             os.writeUTF(mDraw.getCoordX());
+                            os.flush();
                             os.writeUTF(mDraw.getCoordY());
+                            os.flush();
                             mDraw.drawing=true;
+                        }
+                        if(colorChanged==true) {
+                            os.writeUTF("<color>");
+                            os.writeUTF(String.valueOf(color));
+                            colorChanged=false;
                         }
                     } catch (Exception e) {
 
@@ -884,6 +933,8 @@ public class PlayRTCMain extends AppCompatActivity {
                     os = new DataOutputStream(socket.getOutputStream());
                 } catch (IOException e) {
                     Log.d("bbumjun", "connect exception");
+
+
                     // TODO Auto-generated catch block
                     //         e.printStackTrace();
                 }
@@ -910,6 +961,10 @@ public class PlayRTCMain extends AppCompatActivity {
                                 y.add(Float.parseFloat(tempY[i]));
                             }
 
+                        } else if(helper_temp.startsWith("<color>")) {
+                            changedColor = Integer.parseInt(is.readUTF());
+                            Log.d("bbumjun","color value="+changedColor);
+
                         }
                         //서버로부터 읽어들인 메시지msg를 TextView에 출력..
                         //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
@@ -920,9 +975,43 @@ public class PlayRTCMain extends AppCompatActivity {
                             public void run() {
                                 // TODO Auto-generated method stub
                                 if(helper_temp.startsWith("<text>")) {
-                                    printMs.append(receivedId + ":  " + helperMsg + "\n");
+                                    printMs.append("상대 : " + helperMsg + "\n");
                                 } else if(helper_temp.startsWith("<draw>")) {
-                                    mDraw.draw2(x,y);
+
+                                    mDraw.draw2(x, y);
+                                }else if(helper_temp.startsWith("<color>")) {
+                                    switch (changedColor) {
+                                        case R.id.btn_red:
+                                            Log.d("jj", "red btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                            break;
+                                        case R.id.btn_yellow:
+                                            Log.d("jj", "yellow btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                                            break;
+                                        case R.id.btn_green:
+                                            Log.d("jj", "green btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            // mDraw.setColor(Color.parseColor("#388E3C"));
+                                            break;
+                                        case R.id.btn_blue:
+                                            Log.d("jj", "blue btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#1E88E5"));
+                                            break;
+                                        case R.id.btn_black:
+                                            Log.d("jj", "black btn send");
+                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
+                                            myVideoViewGroup.addView(mDraw);
+                                            //mDraw.setColor(Color.parseColor("#000000"));
+                                            break;
+                                    }
 
                                 }
                             }
@@ -944,8 +1033,11 @@ public class PlayRTCMain extends AppCompatActivity {
                         if (mDraw.drawing == false) {
                             Log.d("bbumjun","헬퍼에서 좌표 보냄");
                             os.writeUTF("<draw>");
+                            os.flush();
                             os.writeUTF(mDraw.getCoordX());
+                            os.flush();
                             os.writeUTF(mDraw.getCoordY());
+                            os.flush();
                             mDraw.drawing=true;
                         }
                     } catch (Exception e) {

@@ -175,6 +175,7 @@ public class DrawOnTop extends View implements View.OnTouchListener{
 
     }
 
+
     public void setColor(int color){
         this.color=color;
     }
@@ -182,5 +183,6 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     public int getColor(){
         return this.color;
     }
+
 
 }
