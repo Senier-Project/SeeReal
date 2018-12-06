@@ -13,28 +13,29 @@
         android:padding="30dp"
         android:visibility="gone" >
 
-        <ProgressBar
+        <!--<ProgressBar
             style="@android:style/Widget.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true" />-->
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/toolbox_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
-        android:background="@color/semi_transparent_black"
+        android:background="@drawable/rounded_edittext"
         android:gravity="center_vertical"
         android:paddingRight="10dp"
         android:orientation="vertical"
         android:visibility="visible"
         android:weightSum="1" >
 
-        <ImageButton
+        <!--<ImageButton
             android:id="@+id/ar_click_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +73,48 @@
             android:background="@color/transparent"
             android:onClick="onCameraClick"
             android:padding="15dp"
-            android:src="@drawable/checked" />
+            android:src="@drawable/checked" />-->
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle_red"
+            android:id="@+id/btn_red"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle_yellow"
+            android:id="@+id/btn_yellow"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle_green"
+            android:id="@+id/btn_green"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle_blue"
+            android:id="@+id/btn_blue"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle_black"
+            android:id="@+id/btn_black"/>
+
+
 
     </LinearLayout>
 
@@ -86,25 +128,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-       <!-- <TextView
-            android:id="@+id/printMsg"
-            android:text="test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-        <EditText
-            android:id="@+id/sendMsg"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_width="200px"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/socketButton"
-            android:text="send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/sendMsg"/>-->
+        <!-- <TextView
+             android:id="@+id/printMsg"
+             android:text="test"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             />
+         <EditText
+             android:id="@+id/sendMsg"
+             android:layout_alignParentBottom="true"
+             android:layout_centerInParent="true"
+             android:layout_width="200px"
+             android:layout_height="wrap_content" />
+         <Button
+             android:id="@+id/socketButton"
+             android:text="send"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_toRightOf="@id/sendMsg"/>-->
 
     </RelativeLayout>
 </RelativeLayout>

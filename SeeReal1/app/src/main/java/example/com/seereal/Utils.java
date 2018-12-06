@@ -1,7 +1,9 @@
 package example.com.seereal;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +14,16 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class Utils {
 
+    public static Canvas mCanvas;
+
+
+    public Utils(){
+        mCanvas = new Canvas();
+    }
 
     public static int pxToDp(Context context, int px) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

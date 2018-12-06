@@ -7,25 +7,33 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class DrawOnTop extends View implements View.OnTouchListener{
 
-    private Canvas  mCanvas;
     private Path    mPath;
-    private Paint       mPaint;
+    private Paint   mPaint;
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
-
     private Path re_mPath;
+    public String coordX="",coordY="";
+    public boolean drawing=true;
 
+    private int color=Color.RED;
 
-    public DrawOnTop(Context context)
+    public DrawOnTop(Context context,int color)
     {
         super(context);
         setFocusable(true);
@@ -34,19 +42,15 @@ public class DrawOnTop extends View implements View.OnTouchListener{
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(color);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(6);
-        mCanvas = new Canvas();
         mPath = new Path();
         paths.add(mPath);
 
-
     }
-
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -55,6 +59,7 @@ public class DrawOnTop extends View implements View.OnTouchListener{
 
     @Override
     protected void onDraw(Canvas canvas) {
+
 
         for (Path p : paths){
             canvas.drawPath(p, mPaint);
@@ -65,7 +70,8 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     private static final float TOUCH_TOLERANCE = 4;
 
     private void touch_start(float x, float y) {
-        Log.d("jj","touch start 시작");
+
+
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
@@ -82,10 +88,9 @@ public class DrawOnTop extends View implements View.OnTouchListener{
     }
 
     private void touch_up() {
-        Log.d("jj","touch up 시작");
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen
-        mCanvas.drawPath(mPath, mPaint);
+        Utils.mCanvas.drawPath(mPath, mPaint);
         // kill this so we don't double draw
         mPath = new Path();
         paths.add(mPath);
@@ -119,11 +124,15 @@ public class DrawOnTop extends View implements View.OnTouchListener{
 
     @Override
     public boolean onTouch(View arg0, MotionEvent event) {
+
         float x = event.getX();
         float y = event.getY();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                coordX="";
+                coordY="";
+
                 touch_start(x, y);
                 invalidate();
                 break;
@@ -132,21 +141,46 @@ public class DrawOnTop extends View implements View.OnTouchListener{
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
+                drawing=false;
                 touch_up();
                 invalidate();
                 break;
         }
+        coordX+=x+" ";
+        coordY+=y+" ";
         return true;
     }
 
-    public ArrayList<Path> getPaths () {
+    public String getCoordX() {
+        return coordX;
+    }
+    public String getCoordY() {
+        return coordY;
+    }
+    public void draw2(Vector<Float> x_v ,Vector<Float> y_v) {
 
-        return paths;
+
+        for(int i=0;i<x_v.size();i++) {
+            if(i==0) {
+                touch_start(x_v.get(i), y_v.get(i));
+                invalidate();
+            } else if (i==x_v.size()-1) {
+                touch_up();
+                invalidate();
+            } else {
+                touch_move(x_v.get(i), y_v.get(i));
+                invalidate();
+            }
+        }
+
     }
 
-    public void setPaths(ArrayList<Path> paths)  {
-        this.paths=paths;
-        invalidate();
+    public void setColor(int color){
+        this.color=color;
+    }
+
+    public int getColor(){
+        return this.color;
     }
 
 }

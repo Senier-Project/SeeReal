@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth.AuthStateListener mListener;
 
-
-
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     public static int width;

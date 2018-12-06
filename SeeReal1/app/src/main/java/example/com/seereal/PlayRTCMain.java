@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Output;
 import android.os.Bundle;
 import android.os.Environment;
@@ -66,6 +67,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -102,22 +104,21 @@ public class PlayRTCMain extends AppCompatActivity {
     private String receivedIP;
     private int PORT = 10001;
     private int PORT2 =10002;
+    private String helpee_temp,helper_temp;
 
-
-    Socket receiverSocket;    //클라이언트의 소켓
-    DataInputStream receiver_is;
-    DataOutputStream receiver_os;
     String helperMsg = "";
     boolean helperIsConnected = true;
 
 
-    ServerSocket serversocket,serversocket2;
+    ServerSocket serversocket;
 
-    Socket socket,socket2;
+    Socket socket;
     DataInputStream is;
     DataOutputStream os;
     String helpeeMsg = "";
+    char helpee_direction,helper_direction;
     boolean helpeeIsConnected = true;
+    Vector<Float> x,y;
 
     ObjectInputStream ois;
     ObjectOutputStream oos;
@@ -236,7 +237,7 @@ public class PlayRTCMain extends AppCompatActivity {
                 }
             }
         } catch (SocketException ex) {
-            ex.printStackTrace();
+            //  ex.printStackTrace();
         }
         return null;
     }
@@ -320,27 +321,15 @@ public class PlayRTCMain extends AppCompatActivity {
                 }
 
 
-                toolBoxLayout.setVisibility(View.VISIBLE);
-                toolBoxLayout.setBackgroundColor(Color.TRANSPARENT);
-
-                addContentView(toolBoxLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
 
 
-                mClickObject = toolBoxLayout.findViewById(R.id.ar_click_button);
-                mRotateObject = toolBoxLayout.findViewById(R.id.ar_rotate_button);
-                mProhibitObject = toolBoxLayout.findViewById(R.id.ar_prohibit_button);
-                mCheckObject = toolBoxLayout.findViewById(R.id.ar_check_button);
 
-                toolBoxLayout.bringToFront();
-
-
-                mClickObject.setOnTouchListener(mTouchListener);
+             /*   mClickObject.setOnTouchListener(mTouchListener);
                 mRotateObject.setOnTouchListener(mTouchListener);
                 mProhibitObject.setOnTouchListener(mTouchListener);
-                mCheckObject.setOnTouchListener(mTouchListener);
+                mCheckObject.setOnTouchListener(mTouchListener);*/
 
-                toolBoxLayout.setOnDragListener(mDragListener);
+                //toolBoxLayout.setOnDragListener(mDragListener);
             }
 
             View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -361,22 +350,13 @@ public class PlayRTCMain extends AppCompatActivity {
                     switch (dragEvent.getAction()) {
 
                         case DragEvent.ACTION_DRAG_STARTED:
-
-
                             return true;
-
 
                         case DragEvent.ACTION_DRAG_ENTERED:
-
-
                             return true;
-
 
                         case DragEvent.ACTION_DRAG_EXITED:
-
-
                             return true;
-
 
                         case DragEvent.ACTION_DROP:
                             View view = (View) dragEvent.getLocalState();
@@ -398,12 +378,8 @@ public class PlayRTCMain extends AppCompatActivity {
 
                         case DragEvent.ACTION_DRAG_ENDED:
 
-
                             if (dragEvent.getResult() == false) {//드래그 종료시 처음 숨겼던 뷰를 다시 보이도록 한다.
-
-
                                 ((View) (dragEvent.getLocalState())).setVisibility(View.VISIBLE);
-
 
                             }
                             return true;
@@ -462,11 +438,11 @@ public class PlayRTCMain extends AppCompatActivity {
             PlayRTCConfig config = createPlayRTCConfig();
             playrtc = PlayRTCFactory.createPlayRTC(config, playrtcObserver);
         } catch (UnsupportedPlatformVersionException e) {
-            e.printStackTrace();
+            //     e.printStackTrace();
         } catch (RequiredParameterMissingException e) {
-            e.printStackTrace();
+            //         e.printStackTrace();
         } catch (AssertionError e) {
-            e.printStackTrace();
+            //         e.printStackTrace();
         }
     }
 
@@ -546,7 +522,7 @@ public class PlayRTCMain extends AppCompatActivity {
         }
     }
 
-    private void createLocalVideoView(final Point parentViewDimensions, RelativeLayout parentVideoViewGroup) {
+    private void createLocalVideoView(final Point parentViewDimensions, final RelativeLayout parentVideoViewGroup) {
         if (localView == null) {
             // Create the video size variable.
             Point myVideoSize = new Point();
@@ -560,9 +536,67 @@ public class PlayRTCMain extends AppCompatActivity {
             param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             param.setMargins(30, 30, 30, 30);
 
-            mDraw = new DrawOnTop(getApplicationContext());
-            Preview mPreview = new Preview(getApplicationContext(), myVideoSize.x, myVideoSize.y);
+            toolBoxLayout.setVisibility(View.VISIBLE);
+            toolBoxLayout.setBackgroundColor(Color.TRANSPARENT);
 
+            addContentView(toolBoxLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+            Button.OnClickListener mClickListener = new Button.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+
+                    switch (view.getId()) {
+                        case R.id.btn_red:
+                            Log.d("jj", "red btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#B71C1C"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                            break;
+                        case R.id.btn_yellow:
+                            Log.d("jj", "yellow btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#FFEB3B"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                            break;
+                        case R.id.btn_green:
+                            Log.d("jj", "green btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#388E3C"));
+                            parentVideoViewGroup.addView(mDraw);
+                           // mDraw.setColor(Color.parseColor("#388E3C"));
+                            break;
+                        case R.id.btn_blue:
+                            Log.d("jj", "blue btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#1E88E5"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#1E88E5"));
+                            break;
+                        case R.id.btn_black:
+                            Log.d("jj", "black btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(),Color.parseColor("#000000"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#000000"));
+                            break;
+                    }
+
+                }
+            };
+            Button btn_red = toolBoxLayout.findViewById(R.id.btn_red);
+            Button btn_yellow = toolBoxLayout.findViewById(R.id.btn_yellow);
+            Button btn_green = toolBoxLayout.findViewById(R.id.btn_green);
+            Button btn_blue = toolBoxLayout.findViewById(R.id.btn_blue);
+            Button btn_black = toolBoxLayout.findViewById(R.id.btn_black);
+
+            btn_red.setOnClickListener(mClickListener);
+            btn_yellow.setOnClickListener(mClickListener);
+            btn_green.setOnClickListener(mClickListener);
+            btn_blue.setOnClickListener(mClickListener);
+            btn_black.setOnClickListener(mClickListener);
+
+            toolBoxLayout.bringToFront();
+
+            Preview mPreview = new Preview(getApplicationContext(), myVideoSize.x, myVideoSize.y);
 
             Button btn_undo = util.create(getApplicationContext(), "Undo", Color.TRANSPARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.ALIGN_PARENT_BOTTOM);
             Button btn_redo = util.create(getApplicationContext(), "Redo", Color.TRANSPARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -577,8 +611,9 @@ public class PlayRTCMain extends AppCompatActivity {
                 }
             });
 
+            //TO-DO
 
-           btn_redo.setOnClickListener(new View.OnClickListener() {
+            btn_redo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     status = true;
@@ -593,7 +628,6 @@ public class PlayRTCMain extends AppCompatActivity {
             sendBtn = util.create(getApplicationContext(), "Send", Color.TRANSPARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE,RelativeLayout.RIGHT_OF,sendMs.getId());
             printMs = util.createTV(getApplicationContext(), RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.CENTER_IN_PARENT);
 
-            drawingSendBtn=util.create(getApplicationContext(),"DrawSend",Color.TRANSPARENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE,RelativeLayout.LEFT_OF,sendMs.getId());
 
             sendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -602,122 +636,40 @@ public class PlayRTCMain extends AppCompatActivity {
                     //  String sendText = InitApp.sUser.getDisplayName() + " :  " + sendMs.getText().toString();
                     printMs.append("Me  : "+sendMs.getText().toString() + "\n");
 
-
-
-
+                    sendMs.setText("");
                     if (os == null) return; //클라이언트와 연결되어 있지 않다면 전송불가..
 
-
                     //네트워크 작업이므로 Thread 생성
 
                     new Thread(new Runnable() {
-
-
                         @Override
-
                         public void run() {
-
                             // TODO Auto-generated method stub
-
-
                             //클라이언트로 보낼 메세지 EditText로 부터 얻어오기
-
                             String msg = sendMs.getText().toString();
-
+                            sendMs.setText("");
 
                             try {
-
-                                os.writeUTF(msg); //클라이언트로 메세지 보내기.UTF 방식으로(한글 전송가능...)
-
+                                os.writeUTF("<text> "+msg); //클라이언트로 메세지 보내기.UTF 방식으로(한글 전송가능...)
                                 os.flush();   //다음 메세지 전송을 위해 연결통로의 버퍼를 지워주는 메소드..
-
-
-
-
-
                             } catch (IOException e) {
-
                                 // TODO Auto-generated catch block
-
-                                e.printStackTrace();
-
+                                //          e.printStackTrace();
                             }
-
                         }
-
                     }).start(); //Thread 실행..
-
-
                 }
             });
 
-            drawingSendBtn.setOnClickListener(new View.OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-
-                    if (drawOs == null) return; //클라이언트와 연결되어 있지 않다면 전송불가..
-
-
-                    //네트워크 작업이므로 Thread 생성
-
-                    new Thread(new Runnable() {
-
-
-                        @Override
-
-                        public void run() {
-
-                            // TODO Auto-generated method stub
-
-
-                            //클라이언트로 보낼 메세지 EditText로 부터 얻어오기
-
-                            ArrayList<Path> pathMsg = mDraw.getPaths();
-
-
-                            try {
-
-                                if(pathMsg!=null) {
-                                    Log.d("bbumjun123","보내려는 path에 값 들어있음");
-                                } else {
-                                    Log.d("bbumjun123","보내려는 path에 값 없음 ㅠㅠ");
-
-                                }
-                                drawOs =socket2.getOutputStream();
-                                oos =new ObjectOutputStream(drawOs);
-
-                                oos.writeObject(pathMsg);
-                                oos.flush();
-
-
-
-
-                            } catch (IOException e) {
-
-                                // TODO Auto-generated catch block
-
-                                e.printStackTrace();
-
-                            }
-
-                        }
-
-                    }).start(); //Thread 실행..
-
-                }
-            });
-
+            mDraw= new DrawOnTop(getApplicationContext(),Color.parseColor("#B71C1C"));
             //   parentVideoViewGroup.addView(objectLayout);
             parentVideoViewGroup.addView(btn_redo);
             parentVideoViewGroup.addView(btn_undo);
-            parentVideoViewGroup.addView(mPreview);
+            //parentVideoViewGroup.addView(mPreview);
             parentVideoViewGroup.addView(mDraw);
             parentVideoViewGroup.addView(printMs);
             parentVideoViewGroup.addView(sendBtn);
             parentVideoViewGroup.addView(sendMs);
-            parentVideoViewGroup.addView(drawingSendBtn);
 
             // Create the localViews.
             // new v2.2.6
@@ -807,7 +759,7 @@ public class PlayRTCMain extends AppCompatActivity {
             playrtc.createChannel(new JSONObject());
             ReceivedSingleton.getInstance().reset();
         } catch (RequiredConfigMissingException e) {
-            e.printStackTrace();
+            //    e.printStackTrace();
         }
 
         // 헬피(서버)쪽에서 그림을 받는 부분
@@ -820,7 +772,7 @@ public class PlayRTCMain extends AppCompatActivity {
                     serversocket = new ServerSocket(PORT);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //      e.printStackTrace();
                 }
                 try {
                     //서버에 접속하는 클라이언트 소켓 얻어오기(클라이언트가 접속하면 클라이언트 소켓 리턴)
@@ -828,21 +780,38 @@ public class PlayRTCMain extends AppCompatActivity {
                     Log.d("bbumjun", " 헬피쪽 소켓 연결됨" + receivedIP);
                     //여기 까지 왔다는 것은 클라이언트가 접속했다는 것을 의미하므로
                     //클라이언트와 데이터를 주고 받기 위한 통로구축..
-
                     is = new DataInputStream(socket.getInputStream()); //클라이언트로 부터 메세지를 받기 위한 통로
                     os = new DataOutputStream(socket.getOutputStream()); //클라이언트로 메세지를 보내기 위한 통로
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //        e.printStackTrace();
                 }
                 //클라이언트가 접속을 끊을 때까지 무한반복하면서 클라이언트의 메세지 수신
                 while (helpeeIsConnected) {
                     try {
-                        helpeeMsg = is.readUTF();
+                        helpee_temp=is.readUTF();
+                        Log.d("bbumjun","helpee temp = "+helpee_temp);
+
+                        if(helpee_temp.startsWith("<text> ")) {
+                            helpeeMsg=helpee_temp.substring(7);
+                        } else if(helpee_temp.startsWith("<draw>")){
+                            x= new Vector<Float>();
+                            y= new Vector<Float>();
+                            String strX=is.readUTF();
+                            String strY=is.readUTF();
+                            String[] tempX=strX.split(" ");
+                            String[] tempY=strY.split(" ");
+
+                            for(int i=0;i<tempX.length;i++) {
+                                x.add(Float.parseFloat(tempX[i]));
+                                y.add(Float.parseFloat(tempY[i]));
+                            }
+
+                        }
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        //       e.printStackTrace();
                     }
 
                     //클라이언트로부터 읽어들인 메시지msg를 TextView에 출력..
@@ -853,81 +822,46 @@ public class PlayRTCMain extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // TODO Auto-generated method stub
-                            printMs.append("You" + "  " + helpeeMsg + "\n");
+                            // TOO ADuto-generated method stub
+                            if(helpee_temp.startsWith("<text>")) {
+
+                                printMs.append("You" + "  " + helpeeMsg + "\n");
+                            } else if(helpee_temp.startsWith("<draw>")) {
+                                mDraw.draw2(x,y);
+
+                            }
                         }
                     });
                     /////////////////////////////////////////////////////////////////////////////
                 }//while..
             }//run method...
         }).start(); //Thread 실행..
-
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                try {
-                    //서버소켓 생성.
-                    serversocket2 = new ServerSocket(PORT2);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-                try {
-                    //서버에 접속하는 클라이언트 소켓 얻어오기(클라이언트가 접속하면 클라이언트 소켓 리턴)
-                    socket2 = serversocket2.accept(); //서버는 클라이언트가 접속할 때까지 여기서 대기...
-                    Log.d("bbumjun", " 헬피쪽 소켓 연결됨" + receivedIP);
-                    //여기 까지 왔다는 것은 클라이언트가 접속했다는 것을 의미하므로
-                    //클라이언트와 데이터를 주고 받기 위한 통로구축..
-                    drawIs = socket2.getInputStream();//클라이언트로 부터 그림을 받기 위한 통로
-                    ois =  new ObjectInputStream(drawIs);//클라이언트로 그림을 보내기 위한 통로
-                    drawOs =socket2.getOutputStream();
-                    oos = new ObjectOutputStream(drawOs);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-                //클라이언트가 접속을 끊을 때까지 무한반복하면서 클라이언트의 메세지 수신
-                while (helpeeIsConnected) {
+                while(helpeeIsConnected) {
                     try {
-                        //  서버가 그림 읽어오는 부분
-                        helpeePaths = (ArrayList<Path>)ois.readObject();
-                        if(helpeePaths!=null) {
-                            Log.d("bbumjun123","서버(헬피)쪽에 path 들어옴");
-                        }
-                        else {
-                            Log.d("bbumjun123","서버(헬피)쪽에 path 안들어옴 ㅜㅜ");
+                        if (mDraw.drawing == false) {
+                            Log.d("bbumjun","헬피에서 좌표 보냄");
+                            os.writeUTF("<draw>");
+                            os.writeUTF(mDraw.getCoordX());
+                            os.writeUTF(mDraw.getCoordY());
+                            mDraw.drawing=true;
                         }
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
 
-                    //클라이언트로부터 읽어들인 메시지msg를 TextView에 출력..
-                    //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
-                    //네트워크 작업을 하는 이 Thread에서는 TextView의 글씨를 직접 변경할 수 없음.
-                    //runOnUiThread()는 별도의 Thread가 main Thread에게 UI 작업을 요청하는 메소드임.
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO Auto-generated method stub
-                            mDraw.setPaths(helpeePaths);
-                        }
-                    });
-                    /////////////////////////////////////////////////////////////////////////////
-                }//while..
-            }//run method...
-        }).start(); //Thread 실행..
+                    }
+                }
+            }
+        }).start();
     }
 
     private void connectChannel(String channel, String ip) {
         try {
             playrtc.connectChannel(channel, new JSONObject());
         } catch (RequiredConfigMissingException e) {
-            e.printStackTrace();
+            //  e.printStackTrace();
         }
         final String helpeeIP = ip;
         //헬퍼(클라) 쪽에서 그림을 받는 부분
@@ -935,7 +869,7 @@ public class PlayRTCMain extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
+                // TODO Auto-generated method  stub
 
                 try {
                     //   ip= edit_ip.getText().toString();//IP 주소가 작성되어 있는 EditText에서 서버 IP 얻어오기
@@ -951,63 +885,31 @@ public class PlayRTCMain extends AppCompatActivity {
                 } catch (IOException e) {
                     Log.d("bbumjun", "connect exception");
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //         e.printStackTrace();
                 }
 
                 //서버와 접속이 끊길 때까지 무한반복하면서 서버의 메세지 수신
                 while (true) {
                     try {
-                        helperMsg = is.readUTF(); //서버 부터 메세지가 전송되면 이를 UTF형식으로 읽어서 String 으로 리턴
+                        helper_temp = is.readUTF(); //서버 부터 메세지가 전송되면 이를 UTF형식으로 읽어서 String 으로 리턴
+                        if(helper_temp!=null) {
+                            Log.d("bbumjun","helper temp = "+helper_temp);
+                        }
+                        if(helper_temp.startsWith("<text> ")) {
+                            helperMsg=helper_temp.substring(7);
+                        } else if(helper_temp.startsWith("<draw>")){
+                            x= new Vector<Float>();
+                            y= new Vector<Float>();
+                            String strX=is.readUTF();
+                            String strY=is.readUTF();
+                            String[] tempX=strX.split(" ");
+                            String[] tempY=strY.split(" ");
 
-                        //서버로부터 읽어들인 메시지msg를 TextView에 출력..
-                        //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
-                        //네트워크 작업을 하는 이 Thread에서는 TextView의 글씨를 직접 변경할 수 없음.
-                        //runOnUiThread()는 별도의 Thread가 main Thread에게 UI 작업을 요청하는 메소드임.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                printMs.append(receivedId + ":  " + helperMsg + "\n");
+                            for(int i=0;i<tempX.length;i++) {
+                                x.add(Float.parseFloat(tempX[i]));
+                                y.add(Float.parseFloat(tempY[i]));
                             }
-                        });
-                        //////////////////////////////////////////////////////////////////////////
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }//while
-            }//run method...
-        }).start();//Thread 실행..
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                try {
-                    //   ip= edit_ip.getText().toString();//IP 주소가 작성되어 있는 EditText에서 서버 IP 얻어오기
-                    //     Log.d("bbumjun",ip+" :ip");
-                    //서버와 연결하는 소켓 생성..
-                    socket2 = new Socket(InetAddress.getByName(helpeeIP), PORT2);
-                    Log.d("bbumjun", "헬퍼쪽 socket created" + helpeeIP);
-                    //여기까지 왔다는 것을 예외가 발생하지 않았다는 것이므로 소켓 연결 성공..
-                    //서버와 메세지를 주고받을 통로 구축
-                    drawIs =socket2.getInputStream();
-                    ois =  new ObjectInputStream(drawIs);
-                    drawOs =socket2.getOutputStream();
-                    oos = new ObjectOutputStream(drawOs);
-                } catch (IOException e) {
-                    Log.d("bbumjun", "connect exception");
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                //서버와 접속이 끊길 때까지 무한반복하면서 서버의 메세지 수신
-
-                while (true) {
-                    try {
-                        helperMsg = is.readUTF(); //서버 부터 메세지가 전송되면 이를 UTF형식으로 읽어서 String 으로 리턴
-                        helperPaths = (ArrayList<Path>)ois.readObject();
-                        if(helperPaths!=null) {
-                            Log.d("bbumjun123","클라(헬퍼)쪽에 path 들어옴");
                         }
                         //서버로부터 읽어들인 메시지msg를 TextView에 출력..
                         //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
@@ -1017,17 +919,41 @@ public class PlayRTCMain extends AppCompatActivity {
                             @Override
                             public void run() {
                                 // TODO Auto-generated method stub
-                                mDraw.setPaths(helperPaths);
+                                if(helper_temp.startsWith("<text>")) {
+                                    printMs.append(receivedId + ":  " + helperMsg + "\n");
+                                } else if(helper_temp.startsWith("<draw>")) {
+                                    mDraw.draw2(x,y);
+
+                                }
                             }
                         });
                         //////////////////////////////////////////////////////////////////////////
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        //      e.printStackTrace();
                     }
                 }//while
             }//run method...
         }).start();//Thread 실행..
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(helperIsConnected) {
+                    try {
+                        if (mDraw.drawing == false) {
+                            Log.d("bbumjun","헬퍼에서 좌표 보냄");
+                            os.writeUTF("<draw>");
+                            os.writeUTF(mDraw.getCoordX());
+                            os.writeUTF(mDraw.getCoordY());
+                            mDraw.drawing=true;
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+        }).start();
     }
 
     void sendFCM() {

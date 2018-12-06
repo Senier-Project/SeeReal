@@ -20,7 +20,7 @@
             android:background="#ECEEF1"
             android:overScrollMode="never" />
 
-        <android.support.design.widget.FloatingActionButton
+        <!--<android.support.design.widget.FloatingActionButton
             android:id="@+id/fabMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:visibility="invisible"
             app:backgroundTint="#ffffff"
             app:elevation="6dp"
-            app:pressedTranslationZ="12dp" />
+            app:pressedTranslationZ="12dp" />-->
 
 
     </FrameLayout>

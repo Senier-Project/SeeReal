@@ -186,7 +186,7 @@ public class FriendFragment extends Fragment {
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.app_name)
                                 .titleColor(getResources().getColor(R.color.colorPrimary))
-                                .content("연락되라 얍")
+                                .content("도움을 요청하시겠습니까?")
                                 .positiveText("확인")
                                 .negativeText("취소")
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
