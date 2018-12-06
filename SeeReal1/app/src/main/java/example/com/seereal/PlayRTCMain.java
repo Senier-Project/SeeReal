@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -639,7 +640,10 @@ public class PlayRTCMain extends AppCompatActivity {
 
                     //  String sendText = InitApp.sUser.getDisplayName() + " :  " + sendMs.getText().toString();
                     printMs.append("나 : "+sendMs.getText().toString() + "\n");
-                    sendMs.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(sendMs.getWindowToken(), 0);
+
+
 
                     if (os == null) return; //클라이언트와 연결되어 있지 않다면 전송불가..
 
@@ -1039,6 +1043,10 @@ public class PlayRTCMain extends AppCompatActivity {
                             os.writeUTF(mDraw.getCoordY());
                             os.flush();
                             mDraw.drawing=true;
+                        } else if(colorChanged==true) {
+                            os.writeUTF("<color>");
+                            os.writeUTF(String.valueOf(color));
+                            colorChanged=false;
                         }
                     } catch (Exception e) {
 
