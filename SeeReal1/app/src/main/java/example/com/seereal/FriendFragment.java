@@ -192,13 +192,13 @@ public class FriendFragment extends Fragment {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        //Use the bundle to run the playRTC class with the helper's token and name
                                         Bundle bundle = new Bundle();
                                         Intent intent = new Intent(getActivity(),PlayRTCMain.class);
                                         bundle.putString("token",pushToken);
                                         bundle.putString("name",nameText.getText().toString());
                                         intent.putExtras(bundle);
                                         startActivity(intent);
-                                        //sendFCM();
                                     }
                                 })
                                 .onNegative(new MaterialDialog.SingleButtonCallback() {

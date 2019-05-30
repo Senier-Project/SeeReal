@@ -104,9 +104,9 @@ public class PlayRTCMain extends AppCompatActivity {
     private String receivedId;
     private String receivedIP;
     private int PORT = 10001;
-    private int PORT2 =10002;
-    private String helpee_temp,helper_temp;
-    private boolean colorChanged= false;
+    private int PORT2 = 10002;
+    private String helpee_temp, helper_temp;
+    private boolean colorChanged = false;
     private int color;
     private int changedColor;
     String helperMsg = "";
@@ -119,15 +119,15 @@ public class PlayRTCMain extends AppCompatActivity {
     DataInputStream is;
     DataOutputStream os;
     String helpeeMsg = "";
-    char helpee_direction,helper_direction;
+    char helpee_direction, helper_direction;
     boolean helpeeIsConnected = true;
-    Vector<Float> x,y;
+    Vector<Float> x, y;
 
     ObjectInputStream ois;
     ObjectOutputStream oos;
     InputStream drawIs;
     OutputStream drawOs;
-    ArrayList<Path> helpeePaths,helperPaths;
+    ArrayList<Path> helpeePaths, helperPaths;
 
     // public static boolean isReceived = false;
     private RelativeLayout videoViewGroup;
@@ -177,7 +177,6 @@ public class PlayRTCMain extends AppCompatActivity {
         /*sendMs = toolBoxLayout.findViewById(R.id.sendMsg);
         sendBtn = toolBoxLayout.findViewById(R.id.socketButton);
         printMs = toolBoxLayout.findViewById(R.id.printMsg);*/
-
 
 
         destinationUserModel = new UserModel();
@@ -546,44 +545,44 @@ public class PlayRTCMain extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
 
-            Button.OnClickListener mClickListener = new Button.OnClickListener(){
+            Button.OnClickListener mClickListener = new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                  colorChanged=true;
-                  color=view.getId();
-                         switch (view.getId()) {
-                            case R.id.btn_red:
-                                Log.d("jj", "red btn click");
-                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
-                                parentVideoViewGroup.addView(mDraw);
-                                //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                                break;
-                            case R.id.btn_yellow:
-                                Log.d("jj", "yellow btn click");
-                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
-                                parentVideoViewGroup.addView(mDraw);
-                                //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                                break;
-                            case R.id.btn_green:
-                                Log.d("jj", "green btn click");
-                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
-                                parentVideoViewGroup.addView(mDraw);
-                                // mDraw.setColor(Color.parseColor("#388E3C"));
-                                break;
-                            case R.id.btn_blue:
-                                Log.d("jj", "blue btn click");
-                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
-                                parentVideoViewGroup.addView(mDraw);
-                                //mDraw.setColor(Color.parseColor("#1E88E5"));
-                                break;
-                            case R.id.btn_black:
-                                Log.d("jj", "black btn click");
-                                mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
-                                parentVideoViewGroup.addView(mDraw);
-                                //mDraw.setColor(Color.parseColor("#000000"));
-                                break;
-                        }
+                    colorChanged = true;
+                    color = view.getId();
+                    switch (view.getId()) {
+                        case R.id.btn_red:
+                            Log.d("jj", "red btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                            break;
+                        case R.id.btn_yellow:
+                            Log.d("jj", "yellow btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
+                            break;
+                        case R.id.btn_green:
+                            Log.d("jj", "green btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
+                            parentVideoViewGroup.addView(mDraw);
+                            // mDraw.setColor(Color.parseColor("#388E3C"));
+                            break;
+                        case R.id.btn_blue:
+                            Log.d("jj", "blue btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#1E88E5"));
+                            break;
+                        case R.id.btn_black:
+                            Log.d("jj", "black btn click");
+                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
+                            parentVideoViewGroup.addView(mDraw);
+                            //mDraw.setColor(Color.parseColor("#000000"));
+                            break;
+                    }
 
                 }
             };
@@ -630,8 +629,8 @@ public class PlayRTCMain extends AppCompatActivity {
             });
 
             sendMs = util.createET(getApplicationContext(), 800, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.CENTER_HORIZONTAL);
-            sendBtn = util.create(getApplicationContext(), "Send", Color.TRANSPARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE,RelativeLayout.RIGHT_OF,sendMs.getId());
-            printMs = util.createTV(getApplicationContext(), RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.CENTER_IN_PARENT);
+            sendBtn = util.create(getApplicationContext(), "Send", Color.TRANSPARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE, RelativeLayout.RIGHT_OF, sendMs.getId());
+            printMs = util.createTV(getApplicationContext(), RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.CENTER_IN_PARENT);
 
 
             sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -639,10 +638,9 @@ public class PlayRTCMain extends AppCompatActivity {
                 public void onClick(View view) {
 
                     //  String sendText = InitApp.sUser.getDisplayName() + " :  " + sendMs.getText().toString();
-                    printMs.append("나 : "+sendMs.getText().toString() + "\n");
+                    printMs.append("나 : " + sendMs.getText().toString() + "\n");
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(sendMs.getWindowToken(), 0);
-
 
 
                     if (os == null) return; //클라이언트와 연결되어 있지 않다면 전송불가..
@@ -657,7 +655,7 @@ public class PlayRTCMain extends AppCompatActivity {
                             String msg = sendMs.getText().toString();
 
                             try {
-                                os.writeUTF("<text> "+msg); //클라이언트로 메세지 보내기.UTF 방식으로(한글 전송가능...)
+                                os.writeUTF("<text> " + msg); //클라이언트로 메세지 보내기.UTF 방식으로(한글 전송가능...)
                                 os.flush();   //다음 메세지 전송을 위해 연결통로의 버퍼를 지워주는 메소드..
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
@@ -668,7 +666,7 @@ public class PlayRTCMain extends AppCompatActivity {
                 }
             });
 
-            mDraw= new DrawOnTop(getApplicationContext(),Color.parseColor("#B71C1C"));
+            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
             //   parentVideoViewGroup.addView(objectLayout);
             parentVideoViewGroup.addView(btn_redo);
             parentVideoViewGroup.addView(btn_undo);
@@ -766,141 +764,123 @@ public class PlayRTCMain extends AppCompatActivity {
             playrtc.createChannel(new JSONObject());
             ReceivedSingleton.getInstance().reset();
         } catch (RequiredConfigMissingException e) {
-            //    e.printStackTrace();
+
         }
 
-        // 헬피(서버)쪽에서 그림을 받는 부분
+        //Thread receiving data from helpee (server)
         new Thread(new Runnable() {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
                 try {
-                    //서버소켓 생성.
+                    //create server socket
                     serversocket = new ServerSocket(PORT);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    //      e.printStackTrace();
                 }
                 try {
-                    //서버에 접속하는 클라이언트 소켓 얻어오기(클라이언트가 접속하면 클라이언트 소켓 리턴)
-                    socket = serversocket.accept(); //서버는 클라이언트가 접속할 때까지 여기서 대기...
-                    Log.d("bbumjun", " 헬피쪽 소켓 연결됨" + receivedIP);
-                    //여기 까지 왔다는 것은 클라이언트가 접속했다는 것을 의미하므로
-                    //클라이언트와 데이터를 주고 받기 위한 통로구축..
-                    is = new DataInputStream(socket.getInputStream()); //클라이언트로 부터 메세지를 받기 위한 통로
-                    os = new DataOutputStream(socket.getOutputStream()); //클라이언트로 메세지를 보내기 위한 통로
+
+                    //get client socket that are connected to the server (return client sockets when clients connect)
+                    socket = serversocket.accept(); //The server waits here for the client to connect...
+
+                    //Build a path to send and receive data with clients
+                    is = new DataInputStream(socket.getInputStream()); //path for receiving messages from clients
+                    os = new DataOutputStream(socket.getOutputStream());//path for sending messages to clients
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    //        e.printStackTrace();
                 }
-                //클라이언트가 접속을 끊을 때까지 무한반복하면서 클라이언트의 메세지 수신
+
+                //receive client messages indefinitely until client disconnects
                 while (helpeeIsConnected) {
                     try {
-                        helpee_temp=is.readUTF();
-                        Log.d("bbumjun","helpee temp = "+helpee_temp);
+                        helpee_temp = is.readUTF();
 
-                        if(helpee_temp.startsWith("<text> ")) {
-                            helpeeMsg=helpee_temp.substring(7);
-                        } else if(helpee_temp.startsWith("<draw>")){
-                            x= new Vector<Float>();
-                            y= new Vector<Float>();
-                            String strX=is.readUTF();
-                            String strY=is.readUTF();
-                            String[] tempX=strX.split(" ");
-                            String[] tempY=strY.split(" ");
+                        if (helpee_temp.startsWith("<text> ")) {
+                            helpeeMsg = helpee_temp.substring(7);
+                        } else if (helpee_temp.startsWith("<draw>")) {
+                            x = new Vector<Float>();
+                            y = new Vector<Float>();
+                            String strX = is.readUTF();
+                            String strY = is.readUTF();
+                            String[] tempX = strX.split(" ");
+                            String[] tempY = strY.split(" ");
 
-                            for(int i=0;i<tempX.length;i++) {
+                            for (int i = 0; i < tempX.length; i++) {
                                 x.add(Float.parseFloat(tempX[i]));
                                 y.add(Float.parseFloat(tempY[i]));
                             }
 
-                        }
-                        else if(helpee_temp.startsWith("<color>")) {
-                             changedColor = Integer.parseInt(is.readUTF());
-                            Log.d("bbumjun","color value="+changedColor);
+                        } else if (helpee_temp.startsWith("<color>")) {
+                            changedColor = Integer.parseInt(is.readUTF());
                         }
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         //       e.printStackTrace();
                     }
 
-                    //클라이언트로부터 읽어들인 메시지msg를 TextView에 출력..
-                    //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
-                    //네트워크 작업을 하는 이 Thread에서는 TextView의 글씨를 직접 변경할 수 없음.
-                    //runOnUiThread()는 별도의 Thread가 main Thread에게 UI 작업을 요청하는 메소드임.
-
+                    //display message read from client into TextView
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // TOO ADuto-generated method stub
-                            if(helpee_temp.startsWith("<text>")) {
-
+                            //display text message
+                            if (helpee_temp.startsWith("<text>")) {
                                 printMs.append("상대방 : " + helpeeMsg + "\n");
-                            } else if(helpee_temp.startsWith("<draw>")) {
+                                //display drawing point
+                            } else if (helpee_temp.startsWith("<draw>")) {
                                 mDraw.draw2(x, y);
-                            }
-                                else if (helpee_temp.startsWith("<color>")) {
-                                    switch (changedColor) {
-                                        case R.id.btn_red:
-                                            Log.d("jj", "red btn send");
-                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
-                                            myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                                            break;
-                                        case R.id.btn_yellow:
-                                            Log.d("jj", "yellow btn send");
-                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
-                                            myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
-                                            break;
-                                        case R.id.btn_green:
-                                            Log.d("jj", "green btn send");
-                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
-                                            myVideoViewGroup.addView(mDraw);
-                                            // mDraw.setColor(Color.parseColor("#388E3C"));
-                                            break;
-                                        case R.id.btn_blue:
-                                            Log.d("jj", "blue btn send");
-                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
-                                            myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#1E88E5"));
-                                            break;
-                                        case R.id.btn_black:
-                                            Log.d("jj", "black btn send");
-                                            mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
-                                            myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#000000"));
-                                            break;
-                                    }
+                                //change color option
+                            } else if (helpee_temp.startsWith("<color>")) {
+                                switch (changedColor) {
+                                    case R.id.btn_red:
+                                        mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
+                                        myVideoViewGroup.addView(mDraw);
+                                        break;
+                                    case R.id.btn_yellow:
+                                        mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
+                                        myVideoViewGroup.addView(mDraw);
+                                        break;
+                                    case R.id.btn_green:
+                                        mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
+                                        myVideoViewGroup.addView(mDraw);
+                                        break;
+                                    case R.id.btn_blue:
+                                        mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
+                                        myVideoViewGroup.addView(mDraw);
+                                        break;
+                                    case R.id.btn_black:
+                                        mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
+                                        myVideoViewGroup.addView(mDraw);
+                                        break;
                                 }
+                            }
 
                         }
                     });
-                    /////////////////////////////////////////////////////////////////////////////
                 }//while..
             }//run method...
-        }).start(); //Thread 실행..
+        }).start();
 
+
+        //send client drawing messages indefinitely until client disconnects
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(helpeeIsConnected) {
+                while (helpeeIsConnected) {
                     try {
                         if (mDraw.drawing == false) {
-                            Log.d("bbumjun","헬피에서 좌표 보냄");
                             os.writeUTF("<draw>");
                             os.flush();
                             os.writeUTF(mDraw.getCoordX());
                             os.flush();
                             os.writeUTF(mDraw.getCoordY());
                             os.flush();
-                            mDraw.drawing=true;
+                            mDraw.drawing = true;
                         }
-                        if(colorChanged==true) {
+                        if (colorChanged == true) {
                             os.writeUTF("<color>");
                             os.writeUTF(String.valueOf(color));
-                            colorChanged=false;
+                            colorChanged = false;
                         }
                     } catch (Exception e) {
 
@@ -917,136 +897,110 @@ public class PlayRTCMain extends AppCompatActivity {
             //  e.printStackTrace();
         }
         final String helpeeIP = ip;
-        //헬퍼(클라) 쪽에서 그림을 받는 부분
-
+        //Thread receiving data from helper (client)
         new Thread(new Runnable() {
             @Override
             public void run() {
                 // TODO Auto-generated method  stub
 
                 try {
-                    //   ip= edit_ip.getText().toString();//IP 주소가 작성되어 있는 EditText에서 서버 IP 얻어오기
-                    //     Log.d("bbumjun",ip+" :ip");
-                    //서버와 연결하는 소켓 생성..
+                    //Create a socket that connects to the server.
                     socket = new Socket(InetAddress.getByName(helpeeIP), PORT);
-                    Log.d("bbumjun", "헬퍼쪽 socket created" + helpeeIP);
 
-                    //여기까지 왔다는 것을 예외가 발생하지 않았다는 것이므로 소켓 연결 성공..
-                    //서버와 메세지를 주고받을 통로 구축
+                    //Build a path to send and receive messages with the server
                     is = new DataInputStream(socket.getInputStream());
                     os = new DataOutputStream(socket.getOutputStream());
                 } catch (IOException e) {
-                    Log.d("bbumjun", "connect exception");
 
-
-                    // TODO Auto-generated catch block
-                    //         e.printStackTrace();
                 }
 
-                //서버와 접속이 끊길 때까지 무한반복하면서 서버의 메세지 수신
+                //send client drawing messages indefinitely until server disconnects
                 while (true) {
                     try {
-                        helper_temp = is.readUTF(); //서버 부터 메세지가 전송되면 이를 UTF형식으로 읽어서 String 으로 리턴
-                        if(helper_temp!=null) {
-                            Log.d("bbumjun","helper temp = "+helper_temp);
+                        helper_temp = is.readUTF();
+                        if (helper_temp != null) {
                         }
-                        if(helper_temp.startsWith("<text> ")) {
-                            helperMsg=helper_temp.substring(7);
-                        } else if(helper_temp.startsWith("<draw>")){
-                            x= new Vector<Float>();
-                            y= new Vector<Float>();
-                            String strX=is.readUTF();
-                            String strY=is.readUTF();
-                            String[] tempX=strX.split(" ");
-                            String[] tempY=strY.split(" ");
+                        if (helper_temp.startsWith("<text> ")) {
+                            helperMsg = helper_temp.substring(7);
+                        } else if (helper_temp.startsWith("<draw>")) {
+                            x = new Vector<Float>();
+                            y = new Vector<Float>();
+                            String strX = is.readUTF();
+                            String strY = is.readUTF();
+                            String[] tempX = strX.split(" ");
+                            String[] tempY = strY.split(" ");
 
-                            for(int i=0;i<tempX.length;i++) {
+                            for (int i = 0; i < tempX.length; i++) {
                                 x.add(Float.parseFloat(tempX[i]));
                                 y.add(Float.parseFloat(tempY[i]));
                             }
 
-                        } else if(helper_temp.startsWith("<color>")) {
+                        } else if (helper_temp.startsWith("<color>")) {
                             changedColor = Integer.parseInt(is.readUTF());
-                            Log.d("bbumjun","color value="+changedColor);
 
                         }
-                        //서버로부터 읽어들인 메시지msg를 TextView에 출력..
-                        //안드로이드는 오직 main Thread 만이 UI를 변경할 수 있기에
-                        //네트워크 작업을 하는 이 Thread에서는 TextView의 글씨를 직접 변경할 수 없음.
-                        //runOnUiThread()는 별도의 Thread가 main Thread에게 UI 작업을 요청하는 메소드임.
+                        //display message read from server into TextView
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 // TODO Auto-generated method stub
-                                if(helper_temp.startsWith("<text>")) {
+                                if (helper_temp.startsWith("<text>")) {
                                     printMs.append("상대 : " + helperMsg + "\n");
-                                } else if(helper_temp.startsWith("<draw>")) {
+                                } else if (helper_temp.startsWith("<draw>")) {
 
                                     mDraw.draw2(x, y);
-                                }else if(helper_temp.startsWith("<color>")) {
+                                } else if (helper_temp.startsWith("<color>")) {
                                     switch (changedColor) {
                                         case R.id.btn_red:
-                                            Log.d("jj", "red btn send");
                                             mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#B71C1C"));
                                             myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
                                             break;
                                         case R.id.btn_yellow:
-                                            Log.d("jj", "yellow btn send");
                                             mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#FFEB3B"));
                                             myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#FFEB3B"));
                                             break;
                                         case R.id.btn_green:
-                                            Log.d("jj", "green btn send");
                                             mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#388E3C"));
                                             myVideoViewGroup.addView(mDraw);
-                                            // mDraw.setColor(Color.parseColor("#388E3C"));
                                             break;
                                         case R.id.btn_blue:
-                                            Log.d("jj", "blue btn send");
                                             mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#1E88E5"));
                                             myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#1E88E5"));
                                             break;
                                         case R.id.btn_black:
-                                            Log.d("jj", "black btn send");
                                             mDraw = new DrawOnTop(getApplicationContext(), Color.parseColor("#000000"));
                                             myVideoViewGroup.addView(mDraw);
-                                            //mDraw.setColor(Color.parseColor("#000000"));
                                             break;
                                     }
 
                                 }
                             }
                         });
-                        //////////////////////////////////////////////////////////////////////////
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
-                        //      e.printStackTrace();
                     }
                 }//while
             }//run method...
         }).start();//Thread 실행..
 
+        //send client drawing messages indefinitely until client disconnects
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(helperIsConnected) {
+                while (helperIsConnected) {
                     try {
                         if (mDraw.drawing == false) {
-                            Log.d("bbumjun","헬퍼에서 좌표 보냄");
                             os.writeUTF("<draw>");
                             os.flush();
                             os.writeUTF(mDraw.getCoordX());
                             os.flush();
                             os.writeUTF(mDraw.getCoordY());
                             os.flush();
-                            mDraw.drawing=true;
-                        } else if(colorChanged==true) {
+                            mDraw.drawing = true;
+                        } else if (colorChanged == true) {
                             os.writeUTF("<color>");
                             os.writeUTF(String.valueOf(color));
-                            colorChanged=false;
+                            colorChanged = false;
                         }
                     } catch (Exception e) {
 
@@ -1058,14 +1012,14 @@ public class PlayRTCMain extends AppCompatActivity {
 
     void sendFCM() {
         Gson gson = new Gson();
+        //Setting the content of the notification to send
         NotificationModel notificationModel = new NotificationModel();
         notificationModel.to = destinationUserModel.pushToken;
-        //notificationModel.notification.title=destinationUserModel.userName+" requested video call to you.";
-        //notificationModel.notification.text="Please help me";
         notificationModel.data.title = InitApp.sUser.getDisplayName() + " requested video call to you";
         notificationModel.data.text = playrtc.getChannelId();
         notificationModel.data.ip = getLocalIpAddress();
-        Log.d("bbumjun", "넘기는 ip" + notificationModel.data.ip);
+
+        //Set body and header of request
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
         Request request = new Request.Builder()
                 .header("Content-Type", "application/json")
@@ -1073,13 +1027,14 @@ public class PlayRTCMain extends AppCompatActivity {
                 .url("https://fcm.googleapis.com/fcm/send")
                 .post(requestBody)
                 .build();
+
+        //Create OkHttpClient class object to send a request
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.newCall(request).enqueue((new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
